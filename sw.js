@@ -1,8 +1,12 @@
-const CACHE_NAME = 'sigap-v7';
+const CACHE_NAME = 'sigap-v8';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
   './manifest.json',
+  './logo.png',
+  './logo-white.png',
+  './logo-icon.png',
+  './favicon.png',
   './icon-192.png',
   './icon-512.png',
   './icon-maskable.png'
