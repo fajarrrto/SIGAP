@@ -1141,12 +1141,16 @@
               <!-- View Switcher (Kartu vs Tabel) -->
               <div class="flex items-center gap-0.5 sm:gap-1 bg-slate-100 p-0.5 sm:p-1 rounded-lg sm:rounded-xl border border-slate-200 shrink-0">
                 <button type="button" id="btnViewCard" onclick="setRincianViewMode('card')" title="Mode Kartu"
-                  class="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-xs font-bold transition shadow-xs bg-white text-teal-800 border border-slate-200">
+                  class="flex items-center gap-1 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-xs font-bold transition shadow-xs bg-white text-teal-800 border border-slate-200">
                   <span>📱</span> <span class="hidden xs:inline">Kartu</span>
                 </button>
                 <button type="button" id="btnViewTable" onclick="setRincianViewMode('table')" title="Mode Tabel"
-                  class="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 transition">
+                  class="flex items-center gap-1 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 transition">
                   <span>📊</span> <span class="hidden xs:inline">Tabel</span>
+                </button>
+                <button type="button" id="btnViewCalendar" onclick="setRincianViewMode('calendar')" title="Mode Kalender"
+                  class="flex items-center gap-1 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 transition">
+                  <span>🗓️</span> <span class="hidden xs:inline">Kalender</span>
                 </button>
               </div>
             </div>
@@ -1177,29 +1181,29 @@
             </div>
 
             <!-- Status Filter Buttons (Chips) -->
-            <div class="flex items-center gap-1.5 text-xs overflow-x-auto pb-0.5 scrollbar-thin">
+            <div class="flex flex-wrap items-center gap-1 sm:gap-1.5 text-[11px] sm:text-xs pt-0.5">
               <button type="button" id="filterBtnAll" onclick="setTableStatusFilter('all')"
-                class="px-3 py-1.5 rounded-lg font-bold bg-teal-600 text-white transition shadow-xs shrink-0 flex items-center gap-1.5">
+                class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg font-bold bg-teal-600 text-white transition shadow-xs flex items-center gap-1 sm:gap-1.5">
                 <span>Semua</span>
                 <span id="badgeFilterAll" class="bg-white/20 text-white text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
               </button>
               <button type="button" id="filterBtnHadir" onclick="setTableStatusFilter('Hadir')"
-                class="px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition shrink-0 flex items-center gap-1.5">
+                class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition flex items-center gap-1 sm:gap-1.5">
                 <span>Hadir</span>
                 <span id="badgeFilterHadir" class="bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
               </button>
               <button type="button" id="filterBtnIzin" onclick="setTableStatusFilter('Izin')"
-                class="px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition shrink-0 flex items-center gap-1.5">
+                class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition flex items-center gap-1 sm:gap-1.5">
                 <span>Izin</span>
                 <span id="badgeFilterIzin" class="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
               </button>
               <button type="button" id="filterBtnSakit" onclick="setTableStatusFilter('Sakit')"
-                class="px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition shrink-0 flex items-center gap-1.5">
+                class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition flex items-center gap-1 sm:gap-1.5">
                 <span>Sakit</span>
                 <span id="badgeFilterSakit" class="bg-rose-100 text-rose-800 text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
               </button>
               <button type="button" id="filterBtnBelum" onclick="setTableStatusFilter('Belum')"
-                class="px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition shrink-0 flex items-center gap-1.5">
+                class="px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition flex items-center gap-1 sm:gap-1.5">
                 <span>Belum Diisi</span>
                 <span id="badgeFilterBelum" class="bg-slate-200 text-slate-700 text-[10px] px-1.5 py-0.2 rounded-full font-bold">0</span>
               </button>
@@ -1235,6 +1239,11 @@
                 </tr>
               </tbody>
             </table>
+          </div>
+
+          <!-- TAMPILAN 3: MODE KALENDER (Visual Monthly Attendance Calendar) -->
+          <div id="rincianCalendarContainer" class="hidden p-2.5 sm:p-4 bg-slate-50/60 flex-1 space-y-3">
+            <!-- Dynamic calendar grid injected via JavaScript -->
           </div>
         </div>
       </div>
@@ -2255,19 +2264,24 @@
 
       const btnCard = document.getElementById('btnViewCard');
       const btnTable = document.getElementById('btnViewTable');
+      const btnCalendar = document.getElementById('btnViewCalendar');
       const containerCard = document.getElementById('rincianCardsContainer');
       const containerTable = document.getElementById('rincianTableContainer');
+      const containerCalendar = document.getElementById('rincianCalendarContainer');
 
-      if (mode === 'card') {
-        if (btnCard) btnCard.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-xs bg-white text-teal-800 border border-slate-200";
-        if (btnTable) btnTable.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition";
-        if (containerCard) containerCard.classList.remove('hidden');
-        if (containerTable) containerTable.classList.add('hidden');
-      } else {
-        if (btnTable) btnTable.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-xs bg-white text-teal-800 border border-slate-200";
-        if (btnCard) btnCard.className = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition";
-        if (containerTable) containerTable.classList.remove('hidden');
-        if (containerCard) containerCard.classList.add('hidden');
+      const activeBtnClass = "flex items-center gap-1 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-xs font-bold transition shadow-xs bg-white text-teal-800 border border-slate-200";
+      const inactiveBtnClass = "flex items-center gap-1 px-1.5 sm:px-2.5 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 transition";
+
+      if (btnCard) btnCard.className = (mode === 'card') ? activeBtnClass : inactiveBtnClass;
+      if (btnTable) btnTable.className = (mode === 'table') ? activeBtnClass : inactiveBtnClass;
+      if (btnCalendar) btnCalendar.className = (mode === 'calendar') ? activeBtnClass : inactiveBtnClass;
+
+      if (containerCard) containerCard.classList.toggle('hidden', mode !== 'card');
+      if (containerTable) containerTable.classList.toggle('hidden', mode !== 'table');
+      if (containerCalendar) containerCalendar.classList.toggle('hidden', mode !== 'calendar');
+
+      if (mode === 'calendar') {
+        renderCalendarView();
       }
     }
 
@@ -2285,9 +2299,9 @@
         const btn = btns[key];
         if (!btn) return;
         if (key === filter) {
-          btn.className = "px-3 py-1.5 rounded-lg font-bold bg-teal-600 text-white transition shadow-xs shrink-0 flex items-center gap-1.5";
+          btn.className = "px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg font-bold bg-teal-600 text-white transition shadow-xs flex items-center gap-1 sm:gap-1.5";
         } else {
-          btn.className = "px-3 py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition shrink-0 flex items-center gap-1.5";
+          btn.className = "px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-lg font-medium text-slate-600 hover:bg-slate-100 transition flex items-center gap-1 sm:gap-1.5";
         }
       });
 
@@ -2721,6 +2735,11 @@
         }
       }
 
+      // 3. Render Mode Kalender jika sedang aktif
+      if (currentRincianViewMode === 'calendar') {
+        renderCalendarView();
+      }
+
       // 2. Render Tampilan Tabel (Data Grid View)
       if (tbody) {
         tbody.innerHTML = '';
@@ -2781,6 +2800,167 @@
           });
         }
       }
+    }
+
+    // ================= TAMPILAN 3: MODE KALENDER BULANAN (VISUAL MONTHLY CALENDAR) =================
+    function renderCalendarView() {
+      const container = document.getElementById('rincianCalendarContainer');
+      if (!container) return;
+
+      if (!rawRowsData || rawRowsData.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-8 text-center max-w-md mx-auto space-y-3.5 my-4">
+            <span class="text-3xl block">🗓️</span>
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-slate-900">Belum Ada Data Presensi</h3>
+              <p class="text-xs text-slate-500 mt-1">Belum ada baris kehadiran di periode ini untuk ditampilkan pada kalender.</p>
+            </div>
+            <button type="button" onclick="switchView('dashboard')" class="px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white transition shadow-xs">
+              ✏️ Isi Presensi Sekarang
+            </button>
+          </div>
+        `;
+        return;
+      }
+
+      // Tentukan tanggal awal baris pertama untuk menentukan hari pertama (DayOfWeek)
+      const firstRow = rawRowsData[0];
+      const firstYmd = normalizeToYmd(firstRow.tanggal);
+      let startDayOfWeek = 0;
+      if (firstYmd) {
+        const parts = firstYmd.split('-').map(Number);
+        const firstDateObj = new Date(parts[0], parts[1] - 1, parts[2]);
+        startDayOfWeek = firstDateObj.getDay(); // 0 = Minggu, 1 = Senin, dst.
+      }
+
+      const activeFilter = currentTableFilter;
+      const searchInput = document.getElementById('tableSearchInput');
+      const searchVal = (searchInput ? searchInput.value : "").trim().toLowerCase();
+
+      let daysHtml = '';
+
+      // Padding kotak kosong di awal minggu
+      for (let p = 0; p < startDayOfWeek; p++) {
+        daysHtml += `<div class="hidden sm:block min-h-[50px] sm:min-h-[72px] bg-slate-100/40 rounded-xl border border-dashed border-slate-200/60"></div>`;
+      }
+
+      rawRowsData.forEach((r, idx) => {
+        const isFilled = String(r.status).trim() !== '' && (Number(r.totalGaji || 0) > 0 || r.status.toLowerCase() === 'izin' || r.status.toLowerCase() === 'sakit');
+        const tglInfo = parseTanggalComponents(r.tanggal);
+        const st = String(r.status || '').trim().toLowerCase();
+
+        let matchFilter = true;
+        if (activeFilter === 'Hadir') matchFilter = (st === 'hadir');
+        else if (activeFilter === 'Izin') matchFilter = (st === 'izin');
+        else if (activeFilter === 'Sakit') matchFilter = (st === 'sakit');
+        else if (activeFilter === 'Belum') matchFilter = (!isFilled);
+
+        const tglStr = formatTgl(r.tanggal).toLowerCase();
+        if (searchVal && !tglStr.includes(searchVal) && !st.includes(searchVal)) {
+          matchFilter = false;
+        }
+
+        const opacityClass = matchFilter ? 'opacity-100' : 'opacity-25 scale-95';
+
+        let bgStyle = 'bg-white border-slate-200 text-slate-800';
+        let statusBadgeHtml = '';
+
+        if (st === 'hadir') {
+          bgStyle = 'bg-emerald-50/90 border-emerald-300 text-emerald-950 hover:bg-emerald-100 shadow-2xs';
+          statusBadgeHtml = `
+            <div class="flex items-center gap-1 mt-0.5 sm:mt-1">
+              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 shrink-0"></span>
+              <span class="text-[9px] sm:text-[10px] font-bold text-emerald-700 truncate">Hadir</span>
+            </div>
+            <div class="hidden sm:block text-[9px] font-bold text-emerald-800 mt-0.5 tabular-nums">${idr(r.totalGaji)}</div>
+          `;
+        } else if (st === 'izin') {
+          bgStyle = 'bg-amber-50/90 border-amber-300 text-amber-950 hover:bg-amber-100 shadow-2xs';
+          statusBadgeHtml = `
+            <div class="flex items-center gap-1 mt-0.5 sm:mt-1">
+              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 shrink-0"></span>
+              <span class="text-[9px] sm:text-[10px] font-bold text-amber-700 truncate">Izin</span>
+            </div>
+          `;
+        } else if (st === 'sakit') {
+          bgStyle = 'bg-rose-50/90 border-rose-300 text-rose-950 hover:bg-rose-100 shadow-2xs';
+          statusBadgeHtml = `
+            <div class="flex items-center gap-1 mt-0.5 sm:mt-1">
+              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-rose-500 shrink-0"></span>
+              <span class="text-[9px] sm:text-[10px] font-bold text-rose-700 truncate">Sakit</span>
+            </div>
+          `;
+        } else if (tglInfo.isWeekend) {
+          bgStyle = 'bg-slate-100/70 border-slate-200 text-slate-400';
+          statusBadgeHtml = `
+            <div class="text-[8px] sm:text-[9px] font-semibold text-slate-400 mt-0.5 sm:mt-1 truncate">Libur</div>
+          `;
+        } else {
+          bgStyle = 'bg-white border-dashed border-slate-300 text-slate-500 hover:border-teal-400 hover:bg-teal-50/30';
+          statusBadgeHtml = `
+            <div class="text-[8px] sm:text-[9px] text-slate-400 mt-0.5 sm:mt-1 truncate">Belum</div>
+          `;
+        }
+
+        daysHtml += `
+          <div onclick="openRincianDetailModal(${idx})"
+            class="${bgStyle} ${opacityClass} rounded-xl border p-1 sm:p-2 min-h-[50px] sm:min-h-[72px] flex flex-col justify-between cursor-pointer transition hover:scale-[1.02] hover:shadow-xs">
+            <div class="flex items-center justify-between">
+              <span class="text-[11px] sm:text-xs font-black ${tglInfo.isWeekend ? 'text-rose-600' : 'text-slate-900'}">${tglInfo.dayNum}</span>
+              <span class="text-[8px] sm:text-[9px] font-semibold text-slate-400 uppercase tracking-tighter sm:tracking-normal">${tglInfo.monthNameShort}</span>
+            </div>
+            <div>
+              ${statusBadgeHtml}
+            </div>
+          </div>
+        `;
+      });
+
+      container.innerHTML = `
+        <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
+          <!-- Calendar Legend & Header Bar -->
+          <div class="p-2.5 sm:p-3 border-b border-slate-100 bg-slate-50/70 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5 sm:gap-2">
+              <span class="text-base sm:text-lg">🗓️</span>
+              <div>
+                <h3 class="text-xs sm:text-sm font-bold text-slate-900">Kalender Presensi Bulanan</h3>
+                <p class="text-[9px] sm:text-[10px] text-slate-500">Klik pada salah satu tanggal untuk melihat rincian / edit</p>
+              </div>
+            </div>
+            <!-- Legend Indicators -->
+            <div class="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[10px] font-semibold flex-wrap">
+              <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Hadir
+              </span>
+              <span class="inline-flex items-center gap-1 text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Izin
+              </span>
+              <span class="inline-flex items-center gap-1 text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Sakit
+              </span>
+              <span class="inline-flex items-center gap-1 text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Belum / Libur
+              </span>
+            </div>
+          </div>
+
+          <!-- 7-Days Header (Minggu s/d Sabtu) -->
+          <div class="grid grid-cols-7 text-center font-bold text-[10px] sm:text-xs py-1.5 sm:py-2 bg-slate-100/90 border-b border-slate-200 text-slate-700">
+            <div class="text-rose-600">MIN</div>
+            <div>SEN</div>
+            <div>SEL</div>
+            <div>RAB</div>
+            <div>KAM</div>
+            <div>JUM</div>
+            <div class="text-amber-600">SAB</div>
+          </div>
+
+          <!-- Calendar Days Grid -->
+          <div class="grid grid-cols-7 gap-1 sm:gap-1.5 p-1 sm:p-2.5 bg-slate-50/40">
+            ${daysHtml}
+          </div>
+        </div>
+      `;
     }
 
     // ================= MODAL SLIP GAJI & CETAK PRINT =================
