@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sigap-v8';
+const CACHE_NAME = 'sigap-v9';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -36,7 +36,7 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// Fetch Event - Network first for Google Apps Script & dynamic data, Cache first for assets
+// Fetch Event - Network first for HTML & dynamic requests, Cache first for assets
 self.addEventListener('fetch', (event) => {
   const requestUrl = new URL(event.request.url);
 
@@ -46,17 +46,34 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // Network-first for navigation requests & index.html (so updates are seen immediately)
+  if (event.request.mode === 'navigate' || requestUrl.pathname.endsWith('index.html') || requestUrl.pathname.endsWith('/')) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse && networkResponse.status === 200) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
+          }
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request).then(res => res || caches.match('./index.html')))
+    );
+    return;
+  }
+
   // Cache falling back to network for other assets
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) {
         return cachedResponse;
       }
-      return fetch(event.request).catch(() => {
-        // Fallback to index.html if offline navigation
-        if (event.request.mode === 'navigate') {
-          return caches.match('./index.html');
+      return fetch(event.request).then((networkResponse) => {
+        if (networkResponse && networkResponse.status === 200) {
+          const responseClone = networkResponse.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone));
         }
+        return networkResponse;
       });
     })
   );
