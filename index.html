@@ -112,6 +112,27 @@
         display: none !important;
       }
     }
+
+    /* Dropdown Bulan & Tahun Dark Mode Styling */
+    #monthSelect,
+    #yearSelect {
+      color-scheme: dark;
+    }
+
+    #monthSelect option,
+    #yearSelect option {
+      background-color: #0f2744;
+      color: #ffffff;
+      padding: 6px 12px;
+      font-size: 12px;
+    }
+
+    #monthSelect option:checked,
+    #yearSelect option:checked {
+      background-color: #0d9488;
+      color: #ffffff;
+      font-weight: bold;
+    }
   </style>
 </head>
 
@@ -639,8 +660,8 @@
           <p id="sidebarUserName" class="text-xs sm:text-sm font-bold text-slate-900 truncate">Pengguna</p>
           <div class="flex items-center gap-1.5 mt-0.5">
             <span id="sidebarUserRole"
-              class="text-[9px] px-1.5 py-0.5 rounded-full font-bold bg-teal-100 text-teal-800 border border-teal-200">USER</span>
-            <span class="text-[9px] text-emerald-600 font-semibold flex items-center gap-0.5">
+              class="text-[11px] px-2 py-0.5 rounded-full font-bold bg-teal-100 text-teal-800 border border-teal-200">USER</span>
+            <span class="text-[11px] text-emerald-600 font-semibold flex items-center gap-0.5">
               <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Sesi Aktif
             </span>
           </div>
@@ -697,7 +718,7 @@
             <div class="font-bold text-slate-900 group-hover:text-emerald-900">Install Aplikasi</div>
             <div class="text-[10px] text-slate-500 font-normal">Pasang ke layar HP (PWA)</div>
           </div>
-          <span class="text-[9px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">Instal</span>
+          <span class="text-[10px] sm:text-[11px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">Instal</span>
         </button>
 
         <!-- Sinkronisasi Data Google Sheet -->
@@ -749,11 +770,11 @@
           <img src="./logo-white.png" alt="SIGAP" class="h-7 sm:h-8 w-auto object-contain">
           <div class="flex flex-col justify-center">
             <div class="flex items-center space-x-1.5">
-              <span id="activeUserBadge" class="text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full font-bold"></span>
+              <span id="activeUserBadge" class="text-[11px] px-2.5 py-0.5 rounded-full font-bold"></span>
             </div>
             <div class="flex items-center gap-1.5 mt-0.5">
               <span id="networkStatusBadge"
-                class="inline-flex items-center gap-1 text-[8px] sm:text-[9px] font-semibold bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded-full border border-emerald-400/30">
+                class="inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-400/30">
                 <span id="networkStatusDot" class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
                 <span id="networkStatusText">Online</span>
               </span>
@@ -764,13 +785,13 @@
         <!-- Controls: Bulan/Tahun + Sync + Logout (Logo Power) + Hamburger Menu Button -->
         <div class="flex items-center space-x-1 sm:space-x-1.5">
           <!-- Month & Year Selector (Compact Pill) -->
-          <div class="flex items-center bg-[#071626]/80 rounded-lg p-0.5 border border-teal-500/30 shadow-xs">
+          <div class="flex items-center bg-[#071626]/90 rounded-lg p-0.5 border border-teal-500/40 shadow-xs">
             <select id="monthSelect" onchange="loadMonthData()"
-              class="bg-transparent text-white text-[11px] sm:text-xs font-semibold px-1.5 sm:px-2 py-1 focus:outline-none cursor-pointer">
+              class="bg-transparent text-teal-200 hover:text-white text-xs sm:text-xs font-bold px-2 py-1 rounded-l-md focus:outline-none cursor-pointer transition">
               <option>Memuat...</option>
             </select>
             <select id="yearSelect" onchange="handleYearChange()"
-              class="bg-[#0f2744] text-teal-300 text-[11px] sm:text-xs font-bold px-1.5 sm:px-2 py-1 rounded-md border-l border-[#1c4b77] focus:outline-none cursor-pointer">
+              class="bg-[#0f2744] hover:bg-[#153962] text-teal-300 text-xs sm:text-xs font-bold px-2 py-1 rounded-md border-l border-teal-500/30 focus:outline-none cursor-pointer transition">
               <option value="2026">2026</option>
               <option value="2027">2027</option>
             </select>
@@ -827,7 +848,7 @@
                   Masuk</span>
               </div>
               <div id="statIzinSakit"
-                class="text-[9px] sm:text-[10px] text-slate-500 font-medium mt-0.5 flex items-center gap-1.5 flex-wrap">
+                class="text-[10px] sm:text-[11px] text-slate-500 font-medium mt-0.5 flex items-center gap-1.5 flex-wrap">
                 <span class="text-amber-600 font-semibold">Izin: <b id="countIzin" class="font-bold">0</b></span>
                 <span class="text-slate-300">•</span>
                 <span class="text-rose-600 font-semibold">Sakit: <b id="countSakit" class="font-bold">0</b></span>
@@ -921,11 +942,11 @@
                 <div class="flex items-center justify-between mb-1">
                   <label class="block text-xs font-semibold text-slate-700">Pilih Tanggal</label>
                   <div class="flex items-center gap-1 text-[10px]">
-                    <button type="button" onclick="setQuickDate('today')"
+                    <button type="button" onclick="setQuickDate('today')" id="btnQuickToday"
                       class="px-2 py-0.5 rounded bg-teal-50 hover:bg-teal-100 text-teal-700 font-semibold transition border border-teal-100">
                       Hari Ini
                     </button>
-                    <button type="button" onclick="setQuickDate('yesterday')"
+                    <button type="button" onclick="setQuickDate('yesterday')" id="btnQuickYesterday"
                       class="px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition border border-slate-200">
                       Kemarin
                     </button>
@@ -938,7 +959,12 @@
               <!-- Hari Ke- & Segmented Status Pill Selector -->
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">Hari Ke- (Otomatis)</label>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="block text-xs font-semibold text-slate-700">Hari Ke-</label>
+                    <span class="text-[10px] font-bold text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100 flex items-center gap-1">
+                      <span>🔒</span> Otomatis
+                    </span>
+                  </div>
                   <input type="text" id="inHariKe" readonly
                     class="w-full text-xs sm:text-sm border border-slate-200 bg-slate-100 text-slate-700 font-bold rounded-lg px-3 py-2 cursor-not-allowed">
                 </div>
@@ -965,12 +991,22 @@
 
               <div class="grid grid-cols-2 gap-2.5">
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">Gaji Harian</label>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="block text-xs font-semibold text-slate-700">Gaji Harian</label>
+                    <span class="text-[10px] font-bold text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100 flex items-center gap-1">
+                      <span>🔒</span> Otomatis
+                    </span>
+                  </div>
                   <input type="number" id="inGajiHarian" readonly
                     class="w-full text-xs sm:text-sm border border-slate-200 bg-slate-100 text-slate-700 font-bold rounded-lg px-3 py-2 cursor-not-allowed">
                 </div>
                 <div>
-                  <label class="block text-xs font-semibold text-slate-700 mb-1">Uang Makan</label>
+                  <div class="flex items-center justify-between mb-1">
+                    <label class="block text-xs font-semibold text-slate-700">Uang Makan</label>
+                    <span class="text-[10px] font-bold text-teal-700 bg-teal-50 px-1.5 py-0.5 rounded border border-teal-100 flex items-center gap-1">
+                      <span>🔒</span> Otomatis
+                    </span>
+                  </div>
                   <input type="number" id="inUangMakan" readonly
                     class="w-full text-xs sm:text-sm border border-slate-200 bg-slate-100 text-slate-700 font-bold rounded-lg px-3 py-2 cursor-not-allowed">
                 </div>
@@ -1025,7 +1061,7 @@
               <div class="flex items-baseline gap-1">
                 <span id="rincianStatHari" class="text-sm sm:text-base font-extrabold text-slate-900 leading-tight">0 Hari</span>
               </div>
-              <p id="rincianStatHadirRate" class="text-[9px] text-teal-600 font-semibold truncate">Hari Kerja Masuk</p>
+              <p id="rincianStatHadirRate" class="text-[11px] text-teal-600 font-semibold truncate">Hari Kerja Masuk</p>
             </div>
           </div>
 
@@ -1037,7 +1073,7 @@
             <div class="min-w-0 flex-1">
               <p class="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider truncate">Uang Makan</p>
               <span id="rincianStatMakan" class="text-sm sm:text-base font-extrabold text-slate-900 leading-tight block truncate">Rp0</span>
-              <p class="text-[9px] text-slate-500 font-medium truncate">Total terhitung</p>
+              <p class="text-[11px] text-slate-500 font-medium truncate">Total terhitung</p>
             </div>
           </div>
 
@@ -1049,7 +1085,7 @@
             <div class="min-w-0 flex-1">
               <p class="text-[10px] sm:text-[11px] font-semibold text-slate-400 uppercase tracking-wider truncate">Gaji Harian</p>
               <span id="rincianStatGaji" class="text-sm sm:text-base font-extrabold text-slate-900 leading-tight block truncate">Rp0</span>
-              <p class="text-[9px] text-slate-500 font-medium truncate">Total terhitung</p>
+              <p class="text-[11px] text-slate-500 font-medium truncate">Total terhitung</p>
             </div>
           </div>
 
@@ -1061,7 +1097,7 @@
             <div class="min-w-0 flex-1">
               <p class="text-[10px] sm:text-[11px] font-semibold text-emerald-700 uppercase tracking-wider truncate">Total Pendapatan Harian</p>
               <span id="rincianStatTotal" class="text-base sm:text-lg font-black text-emerald-800 leading-tight block truncate">Rp0</span>
-              <p id="rincianStatKet" class="text-[9px] text-emerald-600 font-medium truncate">Akumulasi pendapatan harian</p>
+              <p id="rincianStatKet" class="text-[11px] text-emerald-600 font-medium truncate">Akumulasi pendapatan harian</p>
             </div>
           </div>
         </div>
@@ -1467,8 +1503,8 @@
         if (badge) {
           badge.innerText = activeUser;
           badge.className = activeRole === "admin"
-            ? "text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full font-bold bg-amber-400 text-slate-900 shadow-xs"
-            : "text-[9px] sm:text-[10px] px-2 py-0.5 rounded-full font-bold bg-[#071626]/90 text-teal-200 border border-teal-500/40";
+            ? "text-[11px] px-2 py-0.5 rounded-full font-bold bg-amber-400 text-slate-900 shadow-xs"
+            : "text-[11px] px-2 py-0.5 rounded-full font-bold bg-[#071626]/90 text-teal-200 border border-teal-500/40";
         }
 
         // Sidebar user info
@@ -1479,8 +1515,8 @@
         if (sidebarRole) {
           sidebarRole.innerText = activeRole.toUpperCase();
           sidebarRole.className = activeRole === "admin"
-            ? "text-[9px] px-2 py-0.5 rounded-full font-bold bg-amber-100 text-amber-800 border border-amber-300"
-            : "text-[9px] px-2 py-0.5 rounded-full font-bold bg-teal-100 text-teal-800 border border-teal-200";
+            ? "text-[11px] px-2 py-0.5 rounded-full font-bold bg-amber-100 text-amber-800 border border-amber-300"
+            : "text-[11px] px-2 py-0.5 rounded-full font-bold bg-teal-100 text-teal-800 border border-teal-200";
         }
 
         const sidebarInitial = document.getElementById('sidebarUserInitial');
@@ -1780,7 +1816,40 @@
 
     function exportToCsv() {
       if (!rawRowsData || rawRowsData.length === 0) {
-        showCustomAlert("Belum ada data untuk diekspor!", "Info", "ℹ️");
+        const emptyStateHtml = `
+          <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-8 sm:p-10 text-center max-w-md mx-auto space-y-3.5 my-4">
+            <div class="w-14 h-14 rounded-2xl bg-teal-50 border border-teal-100 text-teal-700 flex items-center justify-center text-2xl mx-auto shadow-xs">
+              📅
+            </div>
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-slate-900">Belum Ada Catatan Presensi</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">Belum ada data kehadiran untuk bulan yang dipilih. Silakan isi form presensi atau lakukan sinkronisasi data.</p>
+            </div>
+            <div class="flex items-center justify-center gap-2 pt-1 flex-wrap">
+              <button type="button" onclick="switchView('dashboard')" class="px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white transition shadow-xs flex items-center gap-1.5">
+                <span>✏️ Isi Presensi Sekarang</span>
+              </button>
+              <button type="button" onclick="triggerManualSync()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5 border border-slate-200">
+                <span>🔄 Sinkronkan Sheet</span>
+              </button>
+            </div>
+          </div>
+        `;
+        if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="py-8">${emptyStateHtml}</td></tr>`;
+        if (cardsContainer) cardsContainer.innerHTML = emptyStateHtml;
+        if (countEl) countEl.innerText = "0 baris";
+
+        const elStatHari = document.getElementById('rincianStatHari');
+        const elStatMakan = document.getElementById('rincianStatMakan');
+        const elStatGaji = document.getElementById('rincianStatGaji');
+        const elStatTotal = document.getElementById('rincianStatTotal');
+        const elStatKet = document.getElementById('rincianStatKet');
+
+        if (elStatHari) elStatHari.innerText = "0 Hari";
+        if (elStatMakan) elStatMakan.innerText = idr(0);
+        if (elStatGaji) elStatGaji.innerText = idr(0);
+        if (elStatTotal) elStatTotal.innerText = idr(0);
+        if (elStatKet) elStatKet.innerText = "Tidak ada data";
         return;
       }
       const activeYear = document.getElementById('yearSelect').value;
@@ -1928,6 +1997,31 @@
     }
 
     // ================= PENGATURAN STATUS PILL & SHORTCUT TANGGAL =================
+    function updateQuickDateButtons(dateStr) {
+      const btnToday = document.getElementById('btnQuickToday');
+      const btnYesterday = document.getElementById('btnQuickYesterday');
+      if (!btnToday || !btnYesterday) return;
+
+      const todayStr = getLocalDateString(new Date());
+      const yDate = new Date();
+      yDate.setDate(yDate.getDate() - 1);
+      const yesterdayStr = getLocalDateString(yDate);
+
+      const activeClass = "px-2 py-0.5 rounded bg-teal-50 hover:bg-teal-100 text-teal-700 font-semibold transition border border-teal-100";
+      const inactiveClass = "px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition border border-slate-200";
+
+      if (dateStr === todayStr) {
+        btnToday.className = activeClass;
+        btnYesterday.className = inactiveClass;
+      } else if (dateStr === yesterdayStr) {
+        btnToday.className = inactiveClass;
+        btnYesterday.className = activeClass;
+      } else {
+        btnToday.className = inactiveClass;
+        btnYesterday.className = inactiveClass;
+      }
+    }
+
     function setQuickDate(mode) {
       const picker = document.getElementById('inTanggalPicker');
       const d = new Date();
@@ -1935,12 +2029,15 @@
         d.setDate(d.getDate() - 1);
       }
       picker.value = getLocalDateString(d);
+      updateQuickDateButtons(picker.value);
       onDatePickerChange();
     }
 
     async function onDatePickerChange() {
       const picker = document.getElementById('inTanggalPicker');
       if (!picker || !picker.value) return;
+
+      updateQuickDateButtons(picker.value);
 
       const selectedDate = parseYmd(picker.value);
       const period = getPayrollPeriod(selectedDate);
@@ -2320,8 +2417,27 @@
       const cardsContainer = document.getElementById('rincianCardsContainer');
 
       if (!rawRowsData || rawRowsData.length === 0) {
-        if (tbody) tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-slate-400">Belum ada data di bulan ini.</td></tr>';
-        if (cardsContainer) cardsContainer.innerHTML = '<div class="bg-white rounded-2xl border border-slate-200 p-8 text-center text-slate-400">Belum ada data di bulan ini.</div>';
+        const emptyStateHtml = `
+          <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-8 sm:p-10 text-center max-w-md mx-auto space-y-3.5 my-4">
+            <div class="w-14 h-14 rounded-2xl bg-teal-50 border border-teal-100 text-teal-700 flex items-center justify-center text-2xl mx-auto shadow-xs">
+              📅
+            </div>
+            <div>
+              <h3 class="text-sm sm:text-base font-bold text-slate-900">Belum Ada Catatan Presensi</h3>
+              <p class="text-xs text-slate-500 mt-1 leading-relaxed">Belum ada data kehadiran untuk bulan yang dipilih. Silakan isi form presensi atau lakukan sinkronisasi data.</p>
+            </div>
+            <div class="flex items-center justify-center gap-2 pt-1 flex-wrap">
+              <button type="button" onclick="switchView('dashboard')" class="px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white transition shadow-xs flex items-center gap-1.5">
+                <span>✏️ Isi Presensi Sekarang</span>
+              </button>
+              <button type="button" onclick="triggerManualSync()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5 border border-slate-200">
+                <span>🔄 Sinkronkan Sheet</span>
+              </button>
+            </div>
+          </div>
+        `;
+        if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="py-8">${emptyStateHtml}</td></tr>`;
+        if (cardsContainer) cardsContainer.innerHTML = emptyStateHtml;
         if (countEl) countEl.innerText = "0 baris";
 
         const elStatHari = document.getElementById('rincianStatHari');
@@ -2501,9 +2617,9 @@
               <div class="flex items-start justify-between gap-2.5">
                 <div class="flex items-center gap-2.5 sm:gap-3 min-w-0">
                   <div class="flex flex-col items-center justify-center w-11 h-12 rounded-xl border ${tglInfo.isWeekend ? 'bg-amber-50 border-amber-200 text-amber-900' : 'bg-teal-50/60 border-teal-100 text-slate-800'} shadow-2xs shrink-0">
-                    <span class="text-[9px] font-bold uppercase tracking-wider ${tglInfo.isWeekend ? 'text-amber-700' : 'text-teal-700'} leading-none">${tglInfo.dayNameShort}</span>
+                    <span class="text-[10px] font-bold uppercase tracking-wider ${tglInfo.isWeekend ? 'text-amber-700' : 'text-teal-700'} leading-none">${tglInfo.dayNameShort}</span>
                     <span class="text-base sm:text-lg font-black leading-tight">${tglInfo.dayNum}</span>
-                    <span class="text-[8px] font-semibold text-slate-400 leading-none">${tglInfo.monthNameShort}</span>
+                    <span class="text-[10px] font-semibold text-slate-400 leading-none">${tglInfo.monthNameShort}</span>
                   </div>
 
                   <div class="min-w-0">
@@ -2524,17 +2640,17 @@
 
               <div class="grid grid-cols-3 gap-1.5 sm:gap-2 mt-3 pt-2.5 border-t border-slate-100">
                 <div class="bg-slate-50/90 rounded-xl p-2 border border-slate-100 text-center">
-                  <span class="text-[9px] sm:text-[10px] font-semibold uppercase text-slate-400 block tracking-wider">Gaji Harian</span>
+                  <span class="text-[10px] sm:text-[11px] font-semibold uppercase text-slate-400 block tracking-wider">Gaji Harian</span>
                   <span class="text-xs sm:text-sm font-bold text-slate-800 tabular-nums block mt-0.5">${idr(r.gajiHarian)}</span>
                 </div>
 
                 <div class="bg-slate-50/90 rounded-xl p-2 border border-slate-100 text-center">
-                  <span class="text-[9px] sm:text-[10px] font-semibold uppercase text-slate-400 block tracking-wider">Uang Makan</span>
+                  <span class="text-[10px] sm:text-[11px] font-semibold uppercase text-slate-400 block tracking-wider">Uang Makan</span>
                   <span class="text-xs sm:text-sm font-bold text-slate-800 tabular-nums block mt-0.5">${idr(r.uangMakan)}</span>
                 </div>
 
                 <div class="bg-gradient-to-br from-emerald-50 via-teal-50/80 to-white rounded-xl p-2 border border-emerald-200 text-center">
-                  <span class="text-[9px] sm:text-[10px] font-extrabold uppercase text-emerald-700 block tracking-wider">Total Harian</span>
+                  <span class="text-[10px] sm:text-[11px] font-extrabold uppercase text-emerald-700 block tracking-wider">Total Harian</span>
                   <span class="text-xs sm:text-sm font-black text-emerald-900 tabular-nums block mt-0.5">${idr(r.totalGaji)}</span>
                 </div>
               </div>
@@ -2558,7 +2674,20 @@
       if (tbody) {
         tbody.innerHTML = '';
         if (filtered.length === 0) {
-          tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8 text-slate-400">Tidak ada data yang sesuai dengan filter / pencarian.</td></tr>';
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="7" class="py-10 text-center">
+                <div class="max-w-xs mx-auto space-y-2.5">
+                  <span class="text-2xl block">🔍</span>
+                  <p class="text-xs font-bold text-slate-800">Tidak ada data yang cocok</p>
+                  <p class="text-[11px] text-slate-500">Filter atau kata kunci tidak menghasilkan baris.</p>
+                  <button type="button" onclick="clearTableSearch(); setTableStatusFilter('all');" class="px-3 py-1.5 text-xs font-bold bg-teal-50 text-teal-700 hover:bg-teal-100 rounded-lg transition border border-teal-200">
+                    ↺ Reset Filter
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
         } else {
           filtered.forEach((r, idx) => {
             const isFilled = String(r.status).trim() !== '' && (Number(r.totalGaji || 0) > 0 || r.status.toLowerCase() === 'izin' || r.status.toLowerCase() === 'sakit');
@@ -2574,7 +2703,7 @@
               <td class="py-3 px-3.5 whitespace-nowrap">
                 <div class="flex items-center gap-2">
                   <span class="text-xs font-bold ${isFilled ? 'text-slate-900' : 'text-slate-400'}">${tglInfo.fullStr}</span>
-                  ${tglInfo.isWeekend ? '<span class="text-[9px] font-bold px-1.5 py-0.2 rounded bg-amber-50 text-amber-700 border border-amber-200">Weekend</span>' : ''}
+                  ${tglInfo.isWeekend ? '<span class="text-[10px] font-bold px-1.5 py-0.5 rounded bg-amber-50 text-amber-700 border border-amber-200">Weekend</span>' : ''}
                 </div>
               </td>
               <td class="py-3 px-3 text-center whitespace-nowrap text-slate-600 font-semibold">${r.hariKe || '-'}</td>
@@ -2687,11 +2816,11 @@
       if (!badge || !dot || !text) return;
 
       if (isOnline) {
-        badge.className = "inline-flex items-center gap-1 text-[8px] sm:text-[9px] font-semibold bg-emerald-500/20 text-emerald-300 px-1.5 py-0.5 rounded-full border border-emerald-400/30";
+        badge.className = "inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold bg-emerald-500/20 text-emerald-300 px-2 py-0.5 rounded-full border border-emerald-400/30";
         dot.className = "w-1.5 h-1.5 rounded-full bg-emerald-400";
         text.innerText = "Online";
       } else {
-        badge.className = "inline-flex items-center gap-1 text-[8px] sm:text-[9px] font-semibold bg-rose-500/20 text-rose-300 px-1.5 py-0.5 rounded-full border border-rose-400/30";
+        badge.className = "inline-flex items-center gap-1 text-[10px] sm:text-[11px] font-semibold bg-rose-500/20 text-rose-300 px-2 py-0.5 rounded-full border border-rose-400/30";
         dot.className = "w-1.5 h-1.5 rounded-full bg-rose-400";
         text.innerText = "Offline";
       }
@@ -2849,6 +2978,7 @@
       const picker = document.getElementById('inTanggalPicker');
       if (picker) {
         picker.value = getLocalDateString(today);
+        updateQuickDateButtons(picker.value);
         picker.removeEventListener('change', onDatePickerChange);
         picker.addEventListener('change', onDatePickerChange);
       }
@@ -2910,8 +3040,17 @@
     async function submitEntry(e) {
       e.preventDefault();
       const btn = document.getElementById('btnSubmit');
-      btn.disabled = true;
-      btn.innerHTML = `<span>⏳ Menyimpan...</span>`;
+      if (btn) {
+        btn.disabled = true;
+        btn.classList.add('opacity-75', 'cursor-not-allowed');
+        btn.innerHTML = `
+          <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline-block" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Menyimpan ke Spreadsheet...</span>
+        `;
+      }
 
       const datePickerVal = document.getElementById('inTanggalPicker').value;
       const formattedDateString = parseDateToIndoString(datePickerVal);
@@ -2936,14 +3075,26 @@
 
         showToast("Data log kehadiran berhasil disimpan!", "success", "Absen Berhasil");
 
-        btn.disabled = false;
-        btn.innerHTML = `<span>Simpan Absensi</span>`;
+        if (btn) {
+          btn.innerHTML = `
+            <span class="text-emerald-300 font-bold">✓</span>
+            <span>Tersimpan!</span>
+          `;
+          setTimeout(() => {
+            btn.disabled = false;
+            btn.classList.remove('opacity-75', 'cursor-not-allowed');
+            btn.innerHTML = `<span>Simpan Absensi</span>`;
+          }, 1200);
+        }
 
         setTimeout(loadMonthData, 1200);
       } catch (err) {
         showToast("Gagal menyimpan data: " + err.message, "error", "Gagal Absen");
-        btn.disabled = false;
-        btn.innerHTML = `<span>Simpan Absensi</span>`;
+        if (btn) {
+          btn.disabled = false;
+          btn.classList.remove('opacity-75', 'cursor-not-allowed');
+          btn.innerHTML = `<span>Simpan Absensi</span>`;
+        }
       }
     }
 
