@@ -1905,6 +1905,36 @@
       });
     }
 
+    function normalizeToYmd(val) {
+      if (!val) return '';
+      if (val instanceof Date) return getLocalDateString(val);
+      const str = String(val).trim();
+      if (/^\d{4}-\d{2}-\d{2}$/.test(str)) return str;
+      if (str.includes('T')) {
+        const d = new Date(str);
+        if (!isNaN(d.getTime())) return getLocalDateString(d);
+      }
+      const slashMatch = str.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{4})/);
+      if (slashMatch) {
+        const dd = String(slashMatch[1]).padStart(2, '0');
+        const mm = String(slashMatch[2]).padStart(2, '0');
+        const yyyy = slashMatch[3];
+        return `${yyyy}-${mm}-${dd}`;
+      }
+      const match = str.match(/(\d{1,2})\s+([A-Za-z]+)\s+(\d{4})/);
+      if (match) {
+        const day = String(match[1]).padStart(2, '0');
+        const monthName = match[2].toLowerCase();
+        const year = match[3];
+        const monthIndex = bulanIndoMap.findIndex(m => m.toLowerCase().startsWith(monthName.slice(0, 3)) || monthName.startsWith(m.toLowerCase().slice(0, 3)));
+        if (monthIndex !== -1) {
+          const month = String(monthIndex + 1).padStart(2, '0');
+          return `${year}-${month}-${day}`;
+        }
+      }
+      return '';
+    }
+
     // ================= KALKULASI PERIODE PENGGAJIAN & CUT-OFF TGL 25 (WEEKEND MUNDUR) =================
     function parseYmd(ymdStr) {
       if (!ymdStr) return new Date();
@@ -1996,24 +2026,25 @@
       return count;
     }
 
-    // ================= PENGATURAN STATUS PILL & SHORTCUT TANGGAL =================
+        // ================= PENGATURAN STATUS PILL & SHORTCUT TANGGAL =================
     function updateQuickDateButtons(dateStr) {
       const btnToday = document.getElementById('btnQuickToday');
       const btnYesterday = document.getElementById('btnQuickYesterday');
       if (!btnToday || !btnYesterday) return;
 
+      const ymd = normalizeToYmd(dateStr || document.getElementById('inTanggalPicker')?.value);
       const todayStr = getLocalDateString(new Date());
       const yDate = new Date();
       yDate.setDate(yDate.getDate() - 1);
       const yesterdayStr = getLocalDateString(yDate);
 
-      const activeClass = "px-2 py-0.5 rounded bg-teal-50 hover:bg-teal-100 text-teal-700 font-semibold transition border border-teal-100";
+      const activeClass = "px-2 py-0.5 rounded bg-teal-50 hover:bg-teal-100 text-teal-700 font-bold transition border border-teal-200 shadow-2xs";
       const inactiveClass = "px-2 py-0.5 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold transition border border-slate-200";
 
-      if (dateStr === todayStr) {
+      if (ymd === todayStr) {
         btnToday.className = activeClass;
         btnYesterday.className = inactiveClass;
-      } else if (dateStr === yesterdayStr) {
+      } else if (ymd === yesterdayStr) {
         btnToday.className = inactiveClass;
         btnYesterday.className = activeClass;
       } else {
@@ -2028,8 +2059,11 @@
       if (mode === 'yesterday') {
         d.setDate(d.getDate() - 1);
       }
-      picker.value = getLocalDateString(d);
-      updateQuickDateButtons(picker.value);
+      const ymd = getLocalDateString(d);
+      if (picker) {
+        picker.value = ymd;
+      }
+      updateQuickDateButtons(ymd);
       onDatePickerChange();
     }
 
@@ -2069,6 +2103,7 @@
       }
 
       syncDayWithPicker();
+      checkTodayStatus();
     }
 
     function selectStatus(val) {
@@ -2125,18 +2160,18 @@
       }
     }
 
-    function syncDayWithPicker() {
+        function syncDayWithPicker() {
       const pickerVal = document.getElementById('inTanggalPicker').value;
       if (!pickerVal) return;
 
+      const selectedYmd = normalizeToYmd(pickerVal);
       const selectedDate = parseYmd(pickerVal);
-      const formattedSelected = parseDateToIndoString(pickerVal).toLowerCase();
 
       let matchedRow = null;
       if (rawRowsData && rawRowsData.length > 0) {
         rawRowsData.forEach(r => {
-          const rowDateStr = formatTgl(r.tanggal).toLowerCase();
-          if (rowDateStr === formattedSelected || rowDateStr.includes(formattedSelected) || formattedSelected.includes(rowDateStr)) {
+          const rowYmd = normalizeToYmd(r.tanggal);
+          if (rowYmd && rowYmd === selectedYmd) {
             matchedRow = r;
           }
         });
@@ -2163,7 +2198,7 @@
       handleStatusChange();
     }
 
-    // ================= QUICK STATUS BANNER HARI INI =================
+        // ================= STATUS BANNER DINAMIS SESUAI TANGGAL FORM =================
     function checkTodayStatus() {
       const banner = document.getElementById('todayStatusBanner');
       const bannerIcon = document.getElementById('todayStatusIcon');
@@ -2171,43 +2206,42 @@
       const bannerTag = document.getElementById('todayStatusTag');
       if (!banner || !bannerIcon || !bannerText || !bannerTag) return;
 
+      const picker = document.getElementById('inTanggalPicker');
+      const pickerVal = picker ? picker.value : '';
+      const selectedYmd = normalizeToYmd(pickerVal) || getLocalDateString(new Date());
+
       const now = new Date();
       const todayIso = getLocalDateString(now);
-      const todayFormatted = parseDateToIndoString(todayIso).toLowerCase();
-      const todayPeriod = getPayrollPeriod(now);
+      const isToday = (selectedYmd === todayIso);
 
-      const activeMonth = document.getElementById('monthSelect')?.value || '';
-      const activeYear = document.getElementById('yearSelect')?.value || '';
-      const isViewingTodayPeriod = activeMonth.toLowerCase() === todayPeriod.monthName.toLowerCase() && activeYear === todayPeriod.year;
+      const yDate = new Date();
+      yDate.setDate(yDate.getDate() - 1);
+      const isYesterday = (selectedYmd === getLocalDateString(yDate));
 
-      let todayRow = null;
+      const dateLabel = isToday ? "hari ini" : (isYesterday ? "kemarin" : `tanggal ${parseDateToIndoString(selectedYmd)}`);
+
+      let matchedRow = null;
       if (rawRowsData && rawRowsData.length > 0) {
         rawRowsData.forEach(r => {
-          const rowDateStr = formatTgl(r.tanggal).toLowerCase();
-          if (rowDateStr === todayFormatted || rowDateStr.includes(todayFormatted) || todayFormatted.includes(rowDateStr)) {
-            todayRow = r;
+          const rowYmd = normalizeToYmd(r.tanggal);
+          if (rowYmd && rowYmd === selectedYmd) {
+            matchedRow = r;
           }
         });
       }
 
-      if (todayRow && todayRow.status && todayRow.status !== '-' && (Number(todayRow.totalGaji || 0) > 0 || todayRow.status.toLowerCase() === 'izin' || todayRow.status.toLowerCase() === 'sakit')) {
+      if (matchedRow && matchedRow.status && matchedRow.status !== '-' && (Number(matchedRow.totalGaji || 0) > 0 || matchedRow.status.toLowerCase() === 'izin' || matchedRow.status.toLowerCase() === 'sakit')) {
         banner.className = "p-2.5 sm:p-3 rounded-xl border text-xs flex items-center justify-between gap-2.5 bg-emerald-50 border-emerald-200 text-emerald-900 transition-all duration-300";
         bannerIcon.innerText = "✅";
-        bannerText.innerHTML = `Kamu sudah absen hari ini: <b>${todayRow.status}</b> (${todayRow.hariKe})`;
+        bannerText.innerHTML = `Presensi <b>${dateLabel}</b> sudah tercatat: <b>${matchedRow.status}</b> (${matchedRow.hariKe})`;
         bannerTag.className = "text-[10px] px-2.5 py-1 rounded-md font-bold shrink-0 self-center bg-emerald-200 text-emerald-800 whitespace-nowrap";
         bannerTag.innerText = "Tercatat";
-      } else if (isViewingTodayPeriod) {
+      } else {
         banner.className = "p-2.5 sm:p-3 rounded-xl border text-xs flex items-center justify-between gap-2.5 bg-amber-50 border-amber-200 text-amber-900 transition-all duration-300";
         bannerIcon.innerText = "⚠️";
-        bannerText.innerHTML = `Kamu belum absen untuk hari ini. Silakan catat presensimu.`;
+        bannerText.innerHTML = `Kamu belum absen untuk <b>${dateLabel}</b>. Silakan catat presensimu.`;
         bannerTag.className = "text-[10px] px-2.5 py-1 rounded-md font-bold shrink-0 self-center bg-amber-200 text-amber-800 whitespace-nowrap";
         bannerTag.innerText = "Belum Absen";
-      } else {
-        banner.className = "p-2.5 sm:p-3 rounded-xl border text-xs flex items-center justify-between gap-2.5 bg-teal-50 border-teal-200 text-teal-900 transition-all duration-300";
-        bannerIcon.innerText = "ℹ️";
-        bannerText.innerHTML = `Melihat arsip <b>${activeMonth} ${activeYear}</b>. Periode berjalan saat ini adalah <b>${todayPeriod.monthName} ${todayPeriod.year}</b>.`;
-        bannerTag.className = "text-[10px] px-2.5 py-1 rounded-md font-bold shrink-0 self-center bg-teal-200 text-teal-800 whitespace-nowrap";
-        bannerTag.innerText = "Arsip";
       }
     }
 
@@ -3102,7 +3136,8 @@
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {
         navigator.serviceWorker.register('./sw.js').then((reg) => {
-          console.log('Service Worker terdaftar:', reg.scope);
+          reg.update();
+          console.log('Service Worker terdaftar & dicek update:', reg.scope);
         }).catch((err) => {
           console.log('Registrasi Service Worker gagal:', err);
         });
