@@ -761,7 +761,7 @@
   </aside>
 
   <!-- ================= KONTEN DASHBOARD ================= -->
-  <div id="dashboardApp" class="hidden min-h-screen pb-12 bg-slate-50">
+  <div id="dashboardApp" class="hidden min-h-screen pb-20 sm:pb-12 bg-slate-50">
     <!-- Header Ramping & Compact untuk Mobile & Desktop -->
     <header class="bg-gradient-to-r from-[#0b1f36] via-[#0f2744] to-[#123e65] text-white shadow-md sticky top-0 z-30 border-b border-[#1b436c]/40">
       <div class="max-w-6xl mx-auto px-3 sm:px-4 py-2 sm:py-2.5 flex justify-between items-center gap-2">
@@ -782,31 +782,31 @@
           </div>
         </div>
 
-        <!-- Controls: Bulan/Tahun + Sync + Logout (Logo Power) + Hamburger Menu Button -->
+        <!-- Controls: Bulan/Tahun + Sync (Desktop) + Logout (Desktop) + Hamburger Menu Button -->
         <div class="flex items-center space-x-1 sm:space-x-1.5">
           <!-- Month & Year Selector (Compact Pill) -->
           <div class="flex items-center bg-[#071626]/90 rounded-lg p-0.5 border border-teal-500/40 shadow-xs">
             <select id="monthSelect" onchange="loadMonthData()"
-              class="bg-transparent text-teal-200 hover:text-white text-xs sm:text-xs font-bold px-2 py-1 rounded-l-md focus:outline-none cursor-pointer transition">
+              class="bg-transparent text-teal-200 hover:text-white text-[11px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-l-md focus:outline-none cursor-pointer transition">
               <option>Memuat...</option>
             </select>
             <select id="yearSelect" onchange="handleYearChange()"
-              class="bg-[#0f2744] hover:bg-[#153962] text-teal-300 text-xs sm:text-xs font-bold px-2 py-1 rounded-md border-l border-teal-500/30 focus:outline-none cursor-pointer transition">
+              class="bg-[#0f2744] hover:bg-[#153962] text-teal-300 text-[11px] sm:text-xs font-bold px-1.5 sm:px-2 py-0.5 sm:py-1 rounded-md border-l border-teal-500/30 focus:outline-none cursor-pointer transition">
               <option value="2026">2026</option>
               <option value="2027">2027</option>
             </select>
           </div>
 
-          <!-- Quick Sync Button -->
+          <!-- Quick Sync Button (Desktop only; on mobile available in Menu Drawer & Pull) -->
           <button id="btnSyncSheet" onclick="triggerManualSync()" title="Sinkronkan Google Sheets"
-            class="bg-[#071626]/80 hover:bg-[#13345d] active:bg-[#071626] text-xs p-1.5 sm:px-2 sm:py-1.5 rounded-lg text-teal-200 hover:text-white transition flex items-center justify-center border border-teal-500/30 shadow-xs">
+            class="hidden sm:flex bg-[#071626]/80 hover:bg-[#13345d] active:bg-[#071626] text-xs p-1.5 sm:px-2 sm:py-1.5 rounded-lg text-teal-200 hover:text-white transition items-center justify-center border border-teal-500/30 shadow-xs">
             <span id="syncIcon" class="inline-block transition-transform duration-500 text-xs">🔄</span>
             <span class="hidden md:inline ml-1 text-xs font-medium">Sync</span>
           </button>
 
-          <!-- Tombol Logout dengan Logo Power -->
+          <!-- Tombol Logout dengan Logo Power (Desktop only; on mobile available in Menu Drawer) -->
           <button onclick="handleLogout()" title="Keluar / Logout" aria-label="Logout"
-            class="bg-rose-600/90 hover:bg-rose-700 active:bg-rose-800 text-white p-1.5 sm:p-2 rounded-lg transition flex items-center justify-center border border-rose-500/60 shadow-xs">
+            class="hidden sm:flex bg-rose-600/90 hover:bg-rose-700 active:bg-rose-800 text-white p-1.5 sm:p-2 rounded-lg transition items-center justify-center border border-rose-500/60 shadow-xs">
             <svg class="w-4 h-4 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.3"
               stroke-linecap="round" stroke-linejoin="round">
               <path d="M18.36 6.64a9 9 0 1 1-12.73 0" />
@@ -1024,33 +1024,53 @@
 
       <!-- ================= TAMPILAN 2: RINCIAN HARI KERJA (TABEL & KARTU DETAIL) ================= -->
       <div id="viewRincianSection" class="hidden space-y-3 sm:space-y-4">
-        <!-- Top Action Bar -->
-        <div
-          class="flex flex-wrap items-center justify-between gap-2 bg-white p-3 rounded-xl border border-slate-200/90 shadow-xs">
+        <!-- Top Action Bar (Compact Single Line on Mobile) -->
+        <div class="flex items-center justify-between gap-1.5 bg-white p-2 sm:p-3 rounded-xl border border-slate-200/90 shadow-xs">
           <button onclick="switchView('dashboard')"
-            class="text-xs sm:text-sm font-semibold text-teal-800 hover:text-teal-900 flex items-center gap-1.5 py-1.5 px-3 rounded-lg bg-teal-50 hover:bg-teal-100 transition border border-teal-100 shadow-xs">
-            <span>← Kembali ke Form Absensi</span>
+            class="text-[11px] sm:text-xs font-bold text-teal-800 hover:text-teal-900 flex items-center gap-1 py-1 sm:py-1.5 px-2.5 sm:px-3 rounded-lg bg-teal-50 hover:bg-teal-100 transition border border-teal-100 shadow-2xs shrink-0">
+            <span>←</span> <span class="hidden xs:inline">Form</span> Absensi
           </button>
 
-          <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap">
+          <div class="flex items-center gap-1 sm:gap-2">
             <span id="labelSheet"
-              class="text-[10px] sm:text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-1 rounded-full border border-teal-200">
+              class="text-[10px] sm:text-xs font-bold text-teal-800 bg-teal-50 px-2 sm:px-2.5 py-1 rounded-full border border-teal-200">
               Sheet Aktif
             </span>
-            <!-- Tombol Cetak Slip Gaji -->
-            <button onclick="openSlipModal()"
-              class="bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white text-xs font-semibold px-2.5 py-1.5 rounded-lg transition flex items-center gap-1.5 shadow-xs">
-              <span>🖨️ Cetak Slip</span>
+            <button onclick="openSlipModal()" title="Cetak Slip Gaji"
+              class="bg-teal-600 hover:bg-teal-700 active:bg-teal-800 text-white text-[11px] sm:text-xs font-bold px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg transition flex items-center gap-1 shadow-2xs">
+              <span>🖨️</span> <span class="hidden xs:inline">Cetak</span> Slip
             </button>
-            <button id="btnExportCsv" onclick="exportToCsv()"
-              class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold px-2.5 py-1.5 rounded-lg border border-slate-300 transition flex items-center gap-1.5 hidden shadow-xs">
-              <span>📥 CSV</span>
+            <button id="btnExportCsv" onclick="exportToCsv()" title="Unduh CSV"
+              class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] sm:text-xs font-semibold px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-lg border border-slate-300 transition items-center gap-1 hidden shadow-2xs">
+              <span>📥</span> <span class="hidden xs:inline">CSV</span>
             </button>
           </div>
         </div>
 
-        <!-- Ringkasan Finansial Mini (Quick Analytics Header Bar) -->
-        <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-2.5">
+        <!-- Ringkasan Finansial Mini:
+             MOBILE (<sm): Ultra-Compact unified strip (takes only ~48px)
+             DESKTOP (sm+): 4 spacious cards -->
+        <!-- 1. Mobile View (<sm) -->
+        <div class="sm:hidden bg-gradient-to-r from-teal-50/90 via-white to-emerald-50/90 p-2.5 rounded-xl border border-teal-200 shadow-xs">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2 min-w-0">
+              <span class="text-xl shrink-0">💰</span>
+              <div class="min-w-0">
+                <span class="text-[9px] font-bold text-teal-800 uppercase tracking-wider block truncate">Total Pendapatan</span>
+                <span id="rincianStatTotalMobile" class="text-sm font-black text-teal-900 leading-tight block truncate">Rp0</span>
+              </div>
+            </div>
+            <div class="text-right shrink-0">
+              <span id="rincianStatHariMobile" class="text-[10px] font-extrabold text-emerald-800 bg-white px-2 py-0.5 rounded-md border border-emerald-200 shadow-2xs inline-block">0 Hari</span>
+              <div class="text-[9px] text-slate-500 font-semibold mt-0.5">
+                <span>Gaji: </span><b id="rincianStatGajiMobile" class="text-slate-800">Rp0</b> • <span>Mkn: </span><b id="rincianStatMakanMobile" class="text-slate-800">Rp0</b>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. Desktop View (sm+) -->
+        <div class="hidden sm:grid grid-cols-2 lg:grid-cols-4 gap-2 sm:gap-2.5">
           <!-- 1. Hari Hadir -->
           <div class="bg-white p-2.5 sm:p-3 rounded-xl border border-slate-200/90 shadow-xs flex items-center gap-3">
             <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-teal-50 border border-teal-100 flex items-center justify-center text-base sm:text-lg shrink-0">
@@ -1105,56 +1125,54 @@
         <!-- Section Kontainer Utama Rincian -->
         <div id="wrapperTableSection" class="bg-white rounded-xl border border-slate-200/90 shadow-sm overflow-hidden flex flex-col">
           <div class="p-3 sm:p-4 border-b border-slate-100 space-y-3">
-            <!-- Header Bar: Judul, Counter, dan Toggle Mode Kartu vs Tabel -->
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <!-- Header Bar: Judul, Counter, dan Toggle Mode Kartu vs Tabel (Same row on mobile!) -->
+            <div class="flex items-center justify-between gap-2">
               <div>
-                <div class="flex items-center gap-2">
-                  <h2 class="text-sm sm:text-base font-bold text-slate-900">Rincian Hari Kerja</h2>
+                <div class="flex items-center gap-1.5 sm:gap-2">
+                  <h2 class="text-xs sm:text-base font-bold text-slate-900">Rincian Hari Kerja</h2>
                   <span id="filterResultCount"
-                    class="text-[10px] font-semibold text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
+                    class="text-[9px] sm:text-[10px] font-bold text-teal-800 bg-teal-50 px-2 py-0.5 rounded-full border border-teal-200">
                     Menampilkan data...
                   </span>
                 </div>
-                <p class="text-[10px] sm:text-xs text-slate-500 mt-0.5">Daftar kehadiran & akumulasi pendapatan harian</p>
+                <p class="hidden xs:block text-[10px] sm:text-xs text-slate-400 mt-0.5">Daftar kehadiran & akumulasi pendapatan harian</p>
               </div>
 
               <!-- View Switcher (Kartu vs Tabel) -->
-              <div class="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200 self-start sm:self-auto">
-                <button type="button" id="btnViewCard" onclick="setRincianViewMode('card')"
-                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-xs bg-white text-teal-800 border border-slate-200">
-                  <span>📱 Mode Kartu</span>
+              <div class="flex items-center gap-0.5 sm:gap-1 bg-slate-100 p-0.5 sm:p-1 rounded-lg sm:rounded-xl border border-slate-200 shrink-0">
+                <button type="button" id="btnViewCard" onclick="setRincianViewMode('card')" title="Mode Kartu"
+                  class="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-xs font-bold transition shadow-xs bg-white text-teal-800 border border-slate-200">
+                  <span>📱</span> <span class="hidden xs:inline">Kartu</span>
                 </button>
-                <button type="button" id="btnViewTable" onclick="setRincianViewMode('table')"
-                  class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">
-                  <span>📊 Mode Tabel</span>
+                <button type="button" id="btnViewTable" onclick="setRincianViewMode('table')" title="Mode Tabel"
+                  class="flex items-center gap-1 px-2 sm:px-3 py-1 sm:py-1.5 rounded-md sm:rounded-lg text-[11px] sm:text-xs font-medium text-slate-600 hover:text-slate-900 transition">
+                  <span>📊</span> <span class="hidden xs:inline">Tabel</span>
                 </button>
               </div>
             </div>
 
-            <!-- Filter Status & Search Bar & Sort Dropdown -->
-            <div class="grid grid-cols-1 sm:grid-cols-12 gap-2 pt-1">
+            <!-- Filter Status & Search Bar & Sort Dropdown (Single Row on Mobile!) -->
+            <div class="grid grid-cols-12 gap-1.5 pt-0.5">
               <!-- Search Input -->
-              <div class="sm:col-span-7 relative">
+              <div class="col-span-7 sm:col-span-8 relative">
                 <input type="text" id="tableSearchInput" oninput="applyTableFilter()"
-                  placeholder="Cari tanggal, hari, atau status (contoh: Senin, 15, Hadir)..."
-                  class="w-full text-xs border border-slate-200 rounded-lg pl-8 pr-8 py-2 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 font-medium">
-                <span class="absolute left-2.5 top-2.5 text-slate-400 text-xs">🔍</span>
+                  placeholder="Cari tanggal / status..."
+                  class="w-full text-xs border border-slate-200 rounded-lg pl-7 sm:pl-8 pr-7 py-1.5 sm:py-2 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 font-medium">
+                <span class="absolute left-2 sm:left-2.5 top-2 text-slate-400 text-xs">🔍</span>
                 <button type="button" id="btnClearSearch" onclick="clearTableSearch()"
-                  class="absolute right-2.5 top-2 text-slate-400 hover:text-slate-600 text-xs hidden">✕</button>
+                  class="absolute right-2 top-1.5 text-slate-400 hover:text-slate-600 text-xs hidden">✕</button>
               </div>
 
               <!-- Sort Dropdown -->
-              <div class="sm:col-span-5 flex items-center gap-1.5">
-                <div class="relative w-full">
-                  <select id="tableSortSelect" onchange="handleTableSortChange()"
-                    class="w-full text-xs border border-slate-200 rounded-lg pl-2.5 pr-7 py-2 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 font-semibold text-slate-700 appearance-none cursor-pointer">
-                    <option value="date-asc">📅 Urut: Tanggal Terlama (1 → 31)</option>
-                    <option value="date-desc">⏳ Urut: Tanggal Terbaru (31 → 1)</option>
-                    <option value="total-desc">💰 Urut: Total Tertinggi</option>
-                    <option value="total-asc">💵 Urut: Total Terendah</option>
-                  </select>
-                  <span class="absolute right-2.5 top-2.5 text-slate-400 text-[10px] pointer-events-none">▼</span>
-                </div>
+              <div class="col-span-5 sm:col-span-4 relative">
+                <select id="tableSortSelect" onchange="handleTableSortChange()"
+                  class="w-full text-[11px] sm:text-xs border border-slate-200 rounded-lg pl-2 pr-5 sm:pr-6 py-1.5 sm:py-2 focus:ring-2 focus:ring-teal-500 focus:outline-none bg-slate-50 font-semibold text-slate-700 appearance-none cursor-pointer truncate">
+                  <option value="date-asc">📅 Terlama</option>
+                  <option value="date-desc">⏳ Terbaru</option>
+                  <option value="total-desc">💰 Tertinggi</option>
+                  <option value="total-asc">💵 Terendah</option>
+                </select>
+                <span class="absolute right-2 top-2 text-slate-400 text-[9px] pointer-events-none">▼</span>
               </div>
             </div>
 
@@ -1294,6 +1312,20 @@
         setRincianViewMode(currentRincianViewMode);
         applyTableFilter();
       }
+
+      // Update mobile bottom nav active state
+      const bnavDash = document.getElementById('bnavDashboard');
+      const bnavRinc = document.getElementById('bnavRincian');
+      if (bnavDash && bnavRinc) {
+        if (viewName === 'dashboard') {
+          bnavDash.className = "flex flex-col items-center justify-center flex-1 py-1 text-teal-700 font-bold transition";
+          bnavRinc.className = "flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 font-medium transition";
+        } else {
+          bnavRinc.className = "flex flex-col items-center justify-center flex-1 py-1 text-teal-700 font-bold transition";
+          bnavDash.className = "flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 font-medium transition";
+        }
+      }
+
       closeSidebar();
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
@@ -1816,40 +1848,7 @@
 
     function exportToCsv() {
       if (!rawRowsData || rawRowsData.length === 0) {
-        const emptyStateHtml = `
-          <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-8 sm:p-10 text-center max-w-md mx-auto space-y-3.5 my-4">
-            <div class="w-14 h-14 rounded-2xl bg-teal-50 border border-teal-100 text-teal-700 flex items-center justify-center text-2xl mx-auto shadow-xs">
-              📅
-            </div>
-            <div>
-              <h3 class="text-sm sm:text-base font-bold text-slate-900">Belum Ada Catatan Presensi</h3>
-              <p class="text-xs text-slate-500 mt-1 leading-relaxed">Belum ada data kehadiran untuk bulan yang dipilih. Silakan isi form presensi atau lakukan sinkronisasi data.</p>
-            </div>
-            <div class="flex items-center justify-center gap-2 pt-1 flex-wrap">
-              <button type="button" onclick="switchView('dashboard')" class="px-4 py-2 rounded-xl text-xs font-bold bg-teal-600 hover:bg-teal-700 text-white transition shadow-xs flex items-center gap-1.5">
-                <span>✏️ Isi Presensi Sekarang</span>
-              </button>
-              <button type="button" onclick="triggerManualSync()" class="px-3.5 py-2 rounded-xl text-xs font-semibold bg-slate-100 hover:bg-slate-200 text-slate-700 transition flex items-center gap-1.5 border border-slate-200">
-                <span>🔄 Sinkronkan Sheet</span>
-              </button>
-            </div>
-          </div>
-        `;
-        if (tbody) tbody.innerHTML = `<tr><td colspan="7" class="py-8">${emptyStateHtml}</td></tr>`;
-        if (cardsContainer) cardsContainer.innerHTML = emptyStateHtml;
-        if (countEl) countEl.innerText = "0 baris";
-
-        const elStatHari = document.getElementById('rincianStatHari');
-        const elStatMakan = document.getElementById('rincianStatMakan');
-        const elStatGaji = document.getElementById('rincianStatGaji');
-        const elStatTotal = document.getElementById('rincianStatTotal');
-        const elStatKet = document.getElementById('rincianStatKet');
-
-        if (elStatHari) elStatHari.innerText = "0 Hari";
-        if (elStatMakan) elStatMakan.innerText = idr(0);
-        if (elStatGaji) elStatGaji.innerText = idr(0);
-        if (elStatTotal) elStatTotal.innerText = idr(0);
-        if (elStatKet) elStatKet.innerText = "Tidak ada data";
+        showToast("Tidak ada data presensi di bulan ini untuk diunduh.", "warning", "Export CSV");
         return;
       }
       const activeYear = document.getElementById('yearSelect').value;
@@ -2485,6 +2484,15 @@
         if (elStatGaji) elStatGaji.innerText = idr(0);
         if (elStatTotal) elStatTotal.innerText = idr(0);
         if (elStatKet) elStatKet.innerText = "Tidak ada data";
+
+        const mHari0 = document.getElementById('rincianStatHariMobile');
+        const mMakan0 = document.getElementById('rincianStatMakanMobile');
+        const mGaji0 = document.getElementById('rincianStatGajiMobile');
+        const mTotal0 = document.getElementById('rincianStatTotalMobile');
+        if (mHari0) mHari0.innerText = "0 Hari";
+        if (mMakan0) mMakan0.innerText = idr(0);
+        if (mGaji0) mGaji0.innerText = idr(0);
+        if (mTotal0) mTotal0.innerText = idr(0);
         return;
       }
 
@@ -2584,6 +2592,15 @@
       if (elStatGaji) elStatGaji.innerText = idr(statGajiFiltered);
       if (elStatTotal) elStatTotal.innerText = idr(statTotalFiltered);
       if (elStatKet) elStatKet.innerText = `${filtered.length} dari ${rawRowsData.length} baris difilter`;
+
+      const mHari = document.getElementById('rincianStatHariMobile');
+      const mMakan = document.getElementById('rincianStatMakanMobile');
+      const mGaji = document.getElementById('rincianStatGajiMobile');
+      const mTotal = document.getElementById('rincianStatTotalMobile');
+      if (mHari) mHari.innerText = `${statHadirFiltered} Hari`;
+      if (mMakan) mMakan.innerText = idr(statMakanFiltered);
+      if (mGaji) mGaji.innerText = idr(statGajiFiltered);
+      if (mTotal) mTotal.innerText = idr(statTotalFiltered);
 
       if (countEl) {
         countEl.innerText = `${filtered.length} dari ${rawRowsData.length} baris`;
@@ -3147,6 +3164,30 @@
     // Jalankan pengecekan status autentikasi saat web dimuat
     window.onload = checkAuth;
   </script>
+  <!-- ================= MOBILE BOTTOM NAVIGATION BAR (THUMB-ZONE) ================= -->
+  <nav id="mobileBottomNav" class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-slate-200/90 shadow-[0_-4px_16px_rgba(0,0,0,0.06)] px-2 py-1 flex items-center justify-around">
+    <button type="button" id="bnavDashboard" onclick="switchView('dashboard')"
+      class="flex flex-col items-center justify-center flex-1 py-1 text-teal-700 transition">
+      <span class="text-base leading-none">🏠</span>
+      <span class="text-[10px] font-bold mt-1">Form Absen</span>
+    </button>
+    <button type="button" id="bnavRincian" onclick="switchView('rincian')"
+      class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 transition">
+      <span class="text-base leading-none">📋</span>
+      <span class="text-[10px] font-bold mt-1">Rincian</span>
+    </button>
+    <button type="button" onclick="openSlipModal()"
+      class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 transition">
+      <span class="text-base leading-none">🧾</span>
+      <span class="text-[10px] font-bold mt-1">Slip Gaji</span>
+    </button>
+    <button type="button" onclick="openSidebar()"
+      class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 transition">
+      <span class="text-base leading-none">⚙️</span>
+      <span class="text-[10px] font-bold mt-1">Menu</span>
+    </button>
+  </nav>
+
 </body>
 
 </html>
