@@ -3231,91 +3231,167 @@
         return;
       }
 
-      // Tentukan tanggal awal baris pertama untuk menentukan hari pertama (DayOfWeek)
-      const firstRow = rawRowsData[0];
-      const firstYmd = normalizeToYmd(firstRow.tanggal);
-      let startDayOfWeek = 0;
-      if (firstYmd) {
-        const parts = firstYmd.split('-').map(Number);
-        const firstDateObj = new Date(parts[0], parts[1] - 1, parts[2]);
-        startDayOfWeek = firstDateObj.getDay(); // 0 = Minggu, 1 = Senin, dst.
+      // 1. Buat peta baris presensi berdasarkan format YMD (YYYY-MM-DD)
+      const rowMap = new Map();
+      const allYmds = [];
+
+      rawRowsData.forEach((r, idx) => {
+        const ymd = normalizeToYmd(r.tanggal);
+        if (ymd) {
+          rowMap.set(ymd, { row: r, rawIndex: idx });
+          allYmds.push(ymd);
+        }
+      });
+
+      if (allYmds.length === 0) {
+        container.innerHTML = `
+          <div class="bg-white rounded-2xl border border-dashed border-slate-300 p-6 text-center text-xs text-slate-500">
+            Format tanggal data presensi tidak dapat diproses untuk kalender.
+          </div>
+        `;
+        return;
+      }
+
+      allYmds.sort();
+      const startYmd = allYmds[0];
+      const endYmd = allYmds[allYmds.length - 1];
+
+      const [sY, sM, sD] = startYmd.split('-').map(Number);
+      const [eY, eM, eD] = endYmd.split('-').map(Number);
+      const startDate = new Date(sY, sM - 1, sD);
+      const endDate = new Date(eY, eM - 1, eD);
+
+      // 2. Kumpulkan seluruh hari secara kronologis hari-per-hari dari awal hingga akhir periode
+      const allCalendarDays = [];
+      let curDate = new Date(startDate);
+      while (curDate <= endDate) {
+        allCalendarDays.push(new Date(curDate));
+        curDate.setDate(curDate.getDate() + 1);
       }
 
       const activeFilter = currentTableFilter;
       const searchInput = document.getElementById('tableSearchInput');
       const searchVal = (searchInput ? searchInput.value : "").trim().toLowerCase();
 
+      const now = new Date();
+      const todayYmd = getLocalDateString(now);
+
       let daysHtml = '';
 
-      // Padding kotak kosong di awal minggu
+      // 3. Padding sel kosong di awal minggu agar tanggal awal berada di kolom hari yang tepat (0 = Minggu, 1 = Senin, dst)
+      const startDayOfWeek = startDate.getDay();
       for (let p = 0; p < startDayOfWeek; p++) {
-        daysHtml += `<div class="hidden sm:block min-h-[50px] sm:min-h-[72px] bg-slate-100/40 rounded-xl border border-dashed border-slate-200/60"></div>`;
+        daysHtml += `<div class="min-h-[50px] sm:min-h-[72px] bg-slate-100/35 rounded-xl border border-dashed border-slate-200/50"></div>`;
       }
 
-      rawRowsData.forEach((r, idx) => {
-        const isFilled = String(r.status).trim() !== '' && (Number(r.totalGaji || 0) > 0 || r.status.toLowerCase() === 'izin' || r.status.toLowerCase() === 'sakit');
-        const tglInfo = parseTanggalComponents(r.tanggal);
-        const st = String(r.status || '').trim().toLowerCase();
+      // 4. Render setiap hari di dalam periode ke kolom hari yang sesungguhnya
+      allCalendarDays.forEach(d => {
+        const ymd = getLocalDateString(d);
+        const dayOfWeek = d.getDay(); // 0: Min, 1: Sen, 2: Sel, 3: Rab, 4: Kam, 5: Jum, 6: Sab
+        const isWeekend = (dayOfWeek === 0 || dayOfWeek === 6);
+        const dayNum = String(d.getDate()).padStart(2, '0');
+        const monthIndex = d.getMonth();
+        const monthNameShort = bulanIndoMap[monthIndex] ? bulanIndoMap[monthIndex].slice(0, 3).toUpperCase() : "";
+        const isToday = (ymd === todayYmd);
+
+        const entry = rowMap.get(ymd);
 
         let matchFilter = true;
-        if (activeFilter === 'Hadir') matchFilter = (st === 'hadir');
-        else if (activeFilter === 'Izin') matchFilter = (st === 'izin');
-        else if (activeFilter === 'Sakit') matchFilter = (st === 'sakit');
-        else if (activeFilter === 'Belum') matchFilter = (!isFilled);
-
-        const tglStr = formatTgl(r.tanggal).toLowerCase();
-        if (searchVal && !tglStr.includes(searchVal) && !st.includes(searchVal)) {
-          matchFilter = false;
-        }
-
-        const opacityClass = matchFilter ? 'opacity-100' : 'opacity-25 scale-95';
-
         let bgStyle = 'bg-white border-slate-200 text-slate-800';
         let statusBadgeHtml = '';
+        let clickHandler = '';
 
-        if (st === 'hadir') {
-          bgStyle = 'bg-emerald-50/90 border-emerald-300 text-emerald-950 hover:bg-emerald-100 shadow-2xs';
-          statusBadgeHtml = `
-            <div class="flex items-center gap-1 mt-0.5 sm:mt-1">
-              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 shrink-0"></span>
-              <span class="text-[9px] sm:text-[10px] font-bold text-emerald-700 truncate">Hadir</span>
-            </div>
-            <div class="hidden sm:block text-[9px] font-bold text-emerald-800 mt-0.5 tabular-nums">${idr(r.totalGaji)}</div>
-          `;
-        } else if (st === 'izin') {
-          bgStyle = 'bg-amber-50/90 border-amber-300 text-amber-950 hover:bg-amber-100 shadow-2xs';
-          statusBadgeHtml = `
-            <div class="flex items-center gap-1 mt-0.5 sm:mt-1">
-              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 shrink-0"></span>
-              <span class="text-[9px] sm:text-[10px] font-bold text-amber-700 truncate">Izin</span>
-            </div>
-          `;
-        } else if (st === 'sakit') {
-          bgStyle = 'bg-rose-50/90 border-rose-300 text-rose-950 hover:bg-rose-100 shadow-2xs';
-          statusBadgeHtml = `
-            <div class="flex items-center gap-1 mt-0.5 sm:mt-1">
-              <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-rose-500 shrink-0"></span>
-              <span class="text-[9px] sm:text-[10px] font-bold text-rose-700 truncate">Sakit</span>
-            </div>
-          `;
-        } else if (tglInfo.isWeekend) {
-          bgStyle = 'bg-slate-100/70 border-slate-200 text-slate-400';
+        if (entry) {
+          // KASUS A: Tanggal terdaftar pada baris presensi
+          const r = entry.row;
+          const rawIdx = entry.rawIndex;
+          const st = String(r.status || '').trim().toLowerCase();
+          const isFilled = String(r.status).trim() !== '' && (Number(r.totalGaji || 0) > 0 || st === 'izin' || st === 'sakit');
+
+          if (activeFilter === 'Hadir') matchFilter = (st === 'hadir');
+          else if (activeFilter === 'Izin') matchFilter = (st === 'izin');
+          else if (activeFilter === 'Sakit') matchFilter = (st === 'sakit');
+          else if (activeFilter === 'Belum') matchFilter = (!isFilled);
+
+          const tglStr = formatTgl(r.tanggal).toLowerCase();
+          if (searchVal && !tglStr.includes(searchVal) && !st.includes(searchVal)) {
+            matchFilter = false;
+          }
+
+          if (st === 'hadir') {
+            bgStyle = 'bg-emerald-50/90 border-emerald-300 text-emerald-950 hover:bg-emerald-100 shadow-2xs';
+            statusBadgeHtml = `
+              <div class="flex items-center gap-1 mt-0.5 sm:mt-1">
+                <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-emerald-500 shrink-0"></span>
+                <span class="text-[9px] sm:text-[10px] font-bold text-emerald-700 truncate">Hadir</span>
+              </div>
+              <div class="hidden sm:block text-[9px] font-bold text-emerald-800 mt-0.5 tabular-nums">${idr(r.totalGaji)}</div>
+            `;
+          } else if (st === 'izin') {
+            bgStyle = 'bg-amber-50/90 border-amber-300 text-amber-950 hover:bg-amber-100 shadow-2xs';
+            statusBadgeHtml = `
+              <div class="flex items-center gap-1 mt-0.5 sm:mt-1">
+                <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 shrink-0"></span>
+                <span class="text-[9px] sm:text-[10px] font-bold text-amber-700 truncate">Izin</span>
+              </div>
+            `;
+          } else if (st === 'sakit') {
+            bgStyle = 'bg-rose-50/90 border-rose-300 text-rose-950 hover:bg-rose-100 shadow-2xs';
+            statusBadgeHtml = `
+              <div class="flex items-center gap-1 mt-0.5 sm:mt-1">
+                <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-rose-500 shrink-0"></span>
+                <span class="text-[9px] sm:text-[10px] font-bold text-rose-700 truncate">Sakit</span>
+              </div>
+            `;
+          } else {
+            bgStyle = 'bg-white border-dashed border-slate-300 text-slate-500 hover:border-teal-400 hover:bg-teal-50/30';
+            statusBadgeHtml = `
+              <div class="text-[8px] sm:text-[9px] text-slate-400 mt-0.5 sm:mt-1 truncate">Belum</div>
+            `;
+          }
+
+          clickHandler = `onclick="openRincianDetailModal(${rawIdx})"`;
+        } else {
+          // KASUS B: Tanggal di luar hari kerja (Sabtu / Minggu / Libur)
+          bgStyle = 'bg-slate-100/60 border-slate-200/90 text-slate-400 hover:bg-slate-100';
           statusBadgeHtml = `
             <div class="text-[8px] sm:text-[9px] font-semibold text-slate-400 mt-0.5 sm:mt-1 truncate">Libur</div>
           `;
-        } else {
-          bgStyle = 'bg-white border-dashed border-slate-300 text-slate-500 hover:border-teal-400 hover:bg-teal-50/30';
-          statusBadgeHtml = `
-            <div class="text-[8px] sm:text-[9px] text-slate-400 mt-0.5 sm:mt-1 truncate">Belum</div>
-          `;
+
+          if (activeFilter === 'Hadir' || activeFilter === 'Izin' || activeFilter === 'Sakit' || activeFilter === 'Belum') {
+            matchFilter = false;
+          }
+
+          const indoDayName = (dayOfWeek === 0) ? "minggu" : (dayOfWeek === 6 ? "sabtu" : "");
+          if (searchVal && !searchVal.includes('libur') && !searchVal.includes(indoDayName) && !indoDayName.includes(searchVal)) {
+            matchFilter = false;
+          }
+
+          const formattedDateStr = d.toLocaleDateString('id-ID', {
+            weekday: 'long',
+            day: '2-digit',
+            month: 'long',
+            year: 'numeric'
+          });
+          clickHandler = `onclick="quickEditEntry('${encodeURIComponent(formattedDateStr)}', '')"`;
         }
 
+        const opacityClass = matchFilter ? 'opacity-100' : 'opacity-25 scale-95';
+        const todayRingClass = isToday ? 'ring-2 ring-teal-500 ring-offset-1 z-10' : '';
+
+        let dayColor = 'text-slate-900';
+        if (dayOfWeek === 0) dayColor = 'text-rose-600';
+        else if (dayOfWeek === 6) dayColor = 'text-amber-600';
+
         daysHtml += `
-          <div onclick="openRincianDetailModal(${idx})"
-            class="${bgStyle} ${opacityClass} rounded-xl border p-1 sm:p-2 min-h-[50px] sm:min-h-[72px] flex flex-col justify-between cursor-pointer transition hover:scale-[1.02] hover:shadow-xs">
+          <div ${clickHandler}
+            class="${bgStyle} ${opacityClass} ${todayRingClass} rounded-xl border p-1 sm:p-2 min-h-[50px] sm:min-h-[72px] flex flex-col justify-between cursor-pointer transition hover:scale-[1.02] hover:shadow-xs relative">
             <div class="flex items-center justify-between">
-              <span class="text-[11px] sm:text-xs font-black ${tglInfo.isWeekend ? 'text-rose-600' : 'text-slate-900'}">${tglInfo.dayNum}</span>
-              <span class="text-[8px] sm:text-[9px] font-semibold text-slate-400 uppercase tracking-tighter sm:tracking-normal">${tglInfo.monthNameShort}</span>
+              <span class="text-[11px] sm:text-xs font-black ${dayColor}">${dayNum}</span>
+              <div class="flex items-center gap-1">
+                ${isToday ? '<span class="hidden sm:inline text-[7px] font-black text-teal-800 bg-teal-100 px-1 py-0.2 rounded leading-none">HARI INI</span>' : ''}
+                <span class="text-[8px] sm:text-[9px] font-semibold text-slate-400 uppercase tracking-tighter sm:tracking-normal">${monthNameShort}</span>
+              </div>
             </div>
             <div>
               ${statusBadgeHtml}
@@ -3323,6 +3399,16 @@
           </div>
         `;
       });
+
+      // 5. Padding sel kosong di akhir minggu agar baris terakhir tetap rapi 7 kolom
+      const totalCells = startDayOfWeek + allCalendarDays.length;
+      const remainder = totalCells % 7;
+      if (remainder !== 0) {
+        const trailingCount = 7 - remainder;
+        for (let t = 0; t < trailingCount; t++) {
+          daysHtml += `<div class="min-h-[50px] sm:min-h-[72px] bg-slate-100/35 rounded-xl border border-dashed border-slate-200/50"></div>`;
+        }
+      }
 
       container.innerHTML = `
         <div class="bg-white rounded-2xl border border-slate-200/90 shadow-sm overflow-hidden">
