@@ -1,4 +1,4 @@
-const CACHE_NAME = 'sigap-v13';
+const CACHE_NAME = 'sigap-v14';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
