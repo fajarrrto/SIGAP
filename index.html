@@ -307,6 +307,9 @@
           </div>
         </div>
 
+        <!-- Holiday Indicator in Modal -->
+        <div id="modalDetailHolidayBadge" class="hidden"></div>
+
         <!-- Financial Breakdown Cards -->
         <div class="space-y-2">
           <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400">Komponen Pendapatan</p>
@@ -3076,6 +3079,28 @@
       if (elUangMakan) elUangMakan.innerText = idr(r.uangMakan);
       if (elTotal) elTotal.innerText = idr(r.totalGaji);
 
+      const elHolidayBadge = document.getElementById('modalDetailHolidayBadge');
+      if (elHolidayBadge) {
+        const ymd = normalizeToYmd(r.tanggal);
+        const hol = getIndonesianHolidayInfo(ymd);
+        if (hol) {
+          elHolidayBadge.classList.remove('hidden');
+          const isNat = hol.type === 'national';
+          elHolidayBadge.className = isNat
+            ? "p-2.5 rounded-xl bg-rose-50 border border-rose-200 text-rose-900 text-xs font-bold flex items-center gap-2"
+            : "p-2.5 rounded-xl bg-teal-50 border border-teal-200 text-teal-900 text-xs font-bold flex items-center gap-2";
+          elHolidayBadge.innerHTML = `
+            <span class="text-base">${isNat ? '🎉' : '🏖️'}</span>
+            <div class="min-w-0 flex-1">
+              <span class="block font-black">${hol.name}</span>
+              <span class="text-[10px] font-semibold ${isNat ? 'text-rose-600' : 'text-teal-700'}">${isNat ? 'Hari Libur Nasional Resmi (SKB 3 Menteri)' : 'Cuti Bersama Resmi (SKB 3 Menteri)'}</span>
+            </div>
+          `;
+        } else {
+          elHolidayBadge.classList.add('hidden');
+        }
+      }
+
       let badgeColor = "bg-emerald-100 text-emerald-800 border-emerald-300";
       let statusIcon = "✓";
       const st = String(r.status || '').trim().toLowerCase();
@@ -3470,6 +3495,83 @@
       }
     }
 
+    // ================= DATABASE LIBUR NASIONAL & CUTI BERSAMA INDONESIA (SKB 3 MENTERI) =================
+    function getIndonesianHolidayInfo(ymd) {
+      if (!ymd) return null;
+
+      const holidayDb = {
+        // 2026
+        "2026-01-01": { name: "Tahun Baru 2026 Masehi", type: "national" },
+        "2026-01-16": { name: "Isra Mikraj Nabi Muhammad SAW", type: "national" },
+        "2026-02-16": { name: "Cuti Bersama Tahun Baru Imlek", type: "cuti" },
+        "2026-02-17": { name: "Tahun Baru Imlek 2577 Kongzili", type: "national" },
+        "2026-03-18": { name: "Cuti Bersama Hari Suci Nyepi", type: "cuti" },
+        "2026-03-19": { name: "Hari Suci Nyepi (Saka 1948)", type: "national" },
+        "2026-03-20": { name: "Cuti Bersama Idulfitri 1447 H", type: "cuti" },
+        "2026-03-21": { name: "Hari Raya Idulfitri 1447 H", type: "national" },
+        "2026-03-22": { name: "Hari Raya Idulfitri 1447 H", type: "national" },
+        "2026-03-23": { name: "Cuti Bersama Idulfitri 1447 H", type: "cuti" },
+        "2026-03-24": { name: "Cuti Bersama Idulfitri 1447 H", type: "cuti" },
+        "2026-04-03": { name: "Wafat Yesus Kristus (Jumat Agung)", type: "national" },
+        "2026-04-05": { name: "Kebangkitan Yesus Kristus (Paskah)", type: "national" },
+        "2026-05-01": { name: "Hari Buruh Internasional", type: "national" },
+        "2026-05-14": { name: "Kenaikan Yesus Kristus", type: "national" },
+        "2026-05-15": { name: "Cuti Bersama Kenaikan Yesus Kristus", type: "cuti" },
+        "2026-05-27": { name: "Hari Raya Iduladha 1447 H", type: "national" },
+        "2026-05-28": { name: "Cuti Bersama Iduladha 1447 H", type: "cuti" },
+        "2026-05-31": { name: "Hari Raya Waisak 2570 BE", type: "national" },
+        "2026-06-01": { name: "Hari Lahir Pancasila", type: "national" },
+        "2026-06-16": { name: "Tahun Baru Islam 1448 H", type: "national" },
+        "2026-08-17": { name: "HUT Proklamasi Kemerdekaan RI", type: "national" },
+        "2026-08-25": { name: "Maulid Nabi Muhammad SAW", type: "national" },
+        "2026-12-24": { name: "Cuti Bersama Hari Raya Natal", type: "cuti" },
+        "2026-12-25": { name: "Hari Raya Natal", type: "national" },
+
+        // 2027
+        "2027-01-01": { name: "Tahun Baru 2027 Masehi", type: "national" },
+        "2027-01-05": { name: "Isra Mikraj Nabi Muhammad SAW", type: "national" },
+        "2027-02-05": { name: "Cuti Bersama Tahun Baru Imlek", type: "cuti" },
+        "2027-02-06": { name: "Tahun Baru Imlek 2578 Kongzili", type: "national" },
+        "2027-03-08": { name: "Hari Suci Nyepi (Saka 1949)", type: "national" },
+        "2027-03-09": { name: "Cuti Bersama Hari Raya Idulfitri", type: "cuti" },
+        "2027-03-10": { name: "Hari Raya Idulfitri 1448 H", type: "national" },
+        "2027-03-11": { name: "Hari Raya Idulfitri 1448 H", type: "national" },
+        "2027-03-12": { name: "Cuti Bersama Hari Raya Idulfitri", type: "cuti" },
+        "2027-03-15": { name: "Cuti Bersama Hari Raya Idulfitri", type: "cuti" },
+        "2027-03-25": { name: "Cuti Bersama Wafat Yesus Kristus", type: "cuti" },
+        "2027-03-26": { name: "Wafat Yesus Kristus", type: "national" },
+        "2027-03-28": { name: "Kebangkitan Yesus Kristus (Paskah)", type: "national" },
+        "2027-05-01": { name: "Hari Buruh Internasional", type: "national" },
+        "2027-05-06": { name: "Kenaikan Yesus Kristus", type: "national" },
+        "2027-05-17": { name: "Hari Raya Iduladha 1448 H", type: "national" },
+        "2027-05-18": { name: "Cuti Bersama Hari Raya Iduladha", type: "cuti" },
+        "2027-05-19": { name: "Cuti Bersama Hari Raya Waisak", type: "cuti" },
+        "2027-05-20": { name: "Hari Raya Waisak 2571 BE", type: "national" },
+        "2027-06-01": { name: "Hari Lahir Pancasila", type: "national" },
+        "2027-06-06": { name: "Tahun Baru Islam 1449 H", type: "national" },
+        "2027-08-15": { name: "Maulid Nabi Muhammad SAW", type: "national" },
+        "2027-08-17": { name: "HUT Proklamasi Kemerdekaan RI", type: "national" },
+        "2027-12-24": { name: "Cuti Bersama Hari Raya Natal", type: "cuti" },
+        "2027-12-25": { name: "Hari Raya Natal", type: "national" },
+        "2027-12-26": { name: "Isra Mikraj Nabi Muhammad SAW", type: "national" }
+      };
+
+      if (holidayDb[ymd]) return holidayDb[ymd];
+
+      // Hari Libur Nasional Berulang Tanggal Pasti (Tahun Lainnya)
+      const parts = ymd.split('-');
+      if (parts.length === 3) {
+        const mmdd = `${parts[1]}-${parts[2]}`;
+        if (mmdd === "01-01") return { name: "Tahun Baru Masehi", type: "national" };
+        if (mmdd === "05-01") return { name: "Hari Buruh Internasional", type: "national" };
+        if (mmdd === "06-01") return { name: "Hari Lahir Pancasila", type: "national" };
+        if (mmdd === "08-17") return { name: "HUT Kemerdekaan RI", type: "national" };
+        if (mmdd === "12-25") return { name: "Hari Raya Natal", type: "national" };
+      }
+
+      return null;
+    }
+
     // ================= TAMPILAN 3: MODE KALENDER BULANAN (VISUAL MONTHLY CALENDAR) =================
     function renderCalendarView() {
       const container = document.getElementById('rincianCalendarContainer');
@@ -3536,15 +3638,32 @@
       const now = new Date();
       const todayYmd = getLocalDateString(now);
 
+      // 3. Kumpulkan daftar hari libur nasional & cuti bersama pada periode ini
+      const periodHolidays = [];
+      allCalendarDays.forEach(d => {
+        const ymd = getLocalDateString(d);
+        const hol = getIndonesianHolidayInfo(ymd);
+        if (hol) {
+          periodHolidays.push({
+            date: d,
+            ymd: ymd,
+            name: hol.name,
+            type: hol.type,
+            dayNum: String(d.getDate()).padStart(2, '0'),
+            monthNameShort: bulanIndoMap[d.getMonth()] ? bulanIndoMap[d.getMonth()].slice(0, 3).toUpperCase() : ""
+          });
+        }
+      });
+
       let daysHtml = '';
 
-      // 3. Padding sel kosong di awal minggu agar tanggal awal berada di kolom hari yang tepat (0 = Minggu, 1 = Senin, dst)
+      // 4. Padding sel kosong di awal minggu (0 = Minggu, 1 = Senin, dst)
       const startDayOfWeek = startDate.getDay();
       for (let p = 0; p < startDayOfWeek; p++) {
         daysHtml += `<div class="min-h-[50px] sm:min-h-[72px] bg-slate-100/35 rounded-xl border border-dashed border-slate-200/50"></div>`;
       }
 
-      // 4. Render setiap hari di dalam periode ke kolom hari yang sesungguhnya
+      // 5. Render setiap hari di dalam periode dengan informasi status, libur nasional & cuti bersama
       allCalendarDays.forEach(d => {
         const ymd = getLocalDateString(d);
         const dayOfWeek = d.getDay(); // 0: Min, 1: Sen, 2: Sel, 3: Rab, 4: Kam, 5: Jum, 6: Sab
@@ -3553,6 +3672,11 @@
         const monthIndex = d.getMonth();
         const monthNameShort = bulanIndoMap[monthIndex] ? bulanIndoMap[monthIndex].slice(0, 3).toUpperCase() : "";
         const isToday = (ymd === todayYmd);
+
+        const holiday = getIndonesianHolidayInfo(ymd);
+        const isHoliday = !!holiday;
+        const isNationalHoliday = isHoliday && holiday.type === 'national';
+        const isCutiBersama = isHoliday && holiday.type === 'cuti';
 
         const entry = rowMap.get(ymd);
 
@@ -3574,7 +3698,8 @@
           else if (activeFilter === 'Belum') matchFilter = (!isFilled);
 
           const tglStr = formatTgl(r.tanggal).toLowerCase();
-          if (searchVal && !tglStr.includes(searchVal) && !st.includes(searchVal)) {
+          const holNameLower = isHoliday ? holiday.name.toLowerCase() : '';
+          if (searchVal && !tglStr.includes(searchVal) && !st.includes(searchVal) && !holNameLower.includes(searchVal)) {
             matchFilter = false;
           }
 
@@ -3586,6 +3711,7 @@
                 <span class="text-[9px] sm:text-[10px] font-bold text-emerald-700 truncate">Hadir</span>
               </div>
               <div class="hidden sm:block text-[9px] font-bold text-emerald-800 mt-0.5 tabular-nums">${idr(r.totalGaji)}</div>
+              ${isHoliday ? `<div class="mt-0.5 truncate text-[7.5px] sm:text-[8px] font-extrabold ${isNationalHoliday ? 'text-rose-700 bg-rose-100/90 border-rose-200' : 'text-teal-800 bg-teal-100/90 border-teal-200'} px-1 py-0.2 rounded border truncate" title="${holiday.name}">${isNationalHoliday ? '🎉' : '🏖️'} ${holiday.name}</div>` : ''}
             `;
           } else if (st === 'izin') {
             bgStyle = 'bg-amber-50/90 border-amber-300 text-amber-950 hover:bg-amber-100 shadow-2xs';
@@ -3594,6 +3720,7 @@
                 <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-amber-500 shrink-0"></span>
                 <span class="text-[9px] sm:text-[10px] font-bold text-amber-700 truncate">Izin</span>
               </div>
+              ${isHoliday ? `<div class="mt-0.5 truncate text-[7.5px] font-bold text-slate-500">${holiday.name}</div>` : ''}
             `;
           } else if (st === 'sakit') {
             bgStyle = 'bg-rose-50/90 border-rose-300 text-rose-950 hover:bg-rose-100 shadow-2xs';
@@ -3602,6 +3729,25 @@
                 <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-rose-500 shrink-0"></span>
                 <span class="text-[9px] sm:text-[10px] font-bold text-rose-700 truncate">Sakit</span>
               </div>
+              ${isHoliday ? `<div class="mt-0.5 truncate text-[7.5px] font-bold text-slate-500">${holiday.name}</div>` : ''}
+            `;
+          } else if (isNationalHoliday) {
+            bgStyle = 'bg-rose-50/80 border-rose-300 text-rose-950 hover:bg-rose-100 shadow-2xs';
+            statusBadgeHtml = `
+              <div class="flex items-center gap-1 mt-0.5 sm:mt-1 min-w-0" title="${holiday.name}">
+                <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-rose-500 shrink-0"></span>
+                <span class="text-[8.5px] sm:text-[9.5px] font-black text-rose-700 truncate">${holiday.name}</span>
+              </div>
+              <div class="text-[7.5px] sm:text-[8.5px] text-rose-600/90 font-bold truncate">Libur Nasional</div>
+            `;
+          } else if (isCutiBersama) {
+            bgStyle = 'bg-teal-50/80 border-teal-300 text-teal-950 hover:bg-teal-100 shadow-2xs';
+            statusBadgeHtml = `
+              <div class="flex items-center gap-1 mt-0.5 sm:mt-1 min-w-0" title="${holiday.name}">
+                <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-teal-600 shrink-0"></span>
+                <span class="text-[8.5px] sm:text-[9.5px] font-black text-teal-800 truncate">${holiday.name}</span>
+              </div>
+              <div class="text-[7.5px] sm:text-[8.5px] text-teal-600/90 font-bold truncate">Cuti Bersama</div>
             `;
           } else {
             bgStyle = 'bg-white border-dashed border-slate-300 text-slate-500 hover:border-teal-400 hover:bg-teal-50/30';
@@ -3612,19 +3758,45 @@
 
           clickHandler = `onclick="openRincianDetailModal(${rawIdx})"`;
         } else {
-          // KASUS B: Tanggal di luar hari kerja (Sabtu / Minggu / Libur)
-          bgStyle = 'bg-slate-100/60 border-slate-200/90 text-slate-400 hover:bg-slate-100';
-          statusBadgeHtml = `
-            <div class="text-[8px] sm:text-[9px] font-semibold text-slate-400 mt-0.5 sm:mt-1 truncate">Libur</div>
-          `;
+          // KASUS B: Tanggal di luar hari kerja (Libur Nasional / Cuti Bersama / Akhir Pekan)
+          if (isNationalHoliday) {
+            bgStyle = 'bg-rose-50/80 border-rose-300 text-rose-950 hover:bg-rose-100 shadow-2xs';
+            statusBadgeHtml = `
+              <div class="flex items-center gap-1 mt-0.5 sm:mt-1 min-w-0" title="${holiday.name}">
+                <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-rose-500 shrink-0"></span>
+                <span class="text-[8.5px] sm:text-[9.5px] font-black text-rose-700 truncate">${holiday.name}</span>
+              </div>
+              <div class="text-[7.5px] sm:text-[8.5px] text-rose-600/90 font-bold truncate">Libur Nasional</div>
+            `;
+          } else if (isCutiBersama) {
+            bgStyle = 'bg-teal-50/80 border-teal-300 text-teal-950 hover:bg-teal-100 shadow-2xs';
+            statusBadgeHtml = `
+              <div class="flex items-center gap-1 mt-0.5 sm:mt-1 min-w-0" title="${holiday.name}">
+                <span class="w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full bg-teal-600 shrink-0"></span>
+                <span class="text-[8.5px] sm:text-[9.5px] font-black text-teal-800 truncate">${holiday.name}</span>
+              </div>
+              <div class="text-[7.5px] sm:text-[8.5px] text-teal-600/90 font-bold truncate">Cuti Bersama</div>
+            `;
+          } else {
+            bgStyle = 'bg-slate-100/60 border-slate-200/90 text-slate-400 hover:bg-slate-100';
+            statusBadgeHtml = `
+              <div class="text-[8px] sm:text-[9px] font-semibold text-slate-400 mt-0.5 sm:mt-1 truncate">Libur</div>
+            `;
+          }
 
-          if (activeFilter === 'Hadir' || activeFilter === 'Izin' || activeFilter === 'Sakit' || activeFilter === 'Belum') {
+          if (activeFilter === 'Hadir' || activeFilter === 'Izin' || activeFilter === 'Sakit') {
             matchFilter = false;
           }
 
           const indoDayName = (dayOfWeek === 0) ? "minggu" : (dayOfWeek === 6 ? "sabtu" : "");
-          if (searchVal && !searchVal.includes('libur') && !searchVal.includes(indoDayName) && !indoDayName.includes(searchVal)) {
-            matchFilter = false;
+          const holNameLower = isHoliday ? holiday.name.toLowerCase() : '';
+          if (searchVal) {
+            const matchSearch = searchVal.includes('libur') ||
+              searchVal.includes('cuti') ||
+              searchVal.includes(indoDayName) ||
+              indoDayName.includes(searchVal) ||
+              holNameLower.includes(searchVal);
+            if (!matchSearch) matchFilter = false;
           }
 
           const formattedDateStr = d.toLocaleDateString('id-ID', {
@@ -3640,12 +3812,13 @@
         const todayRingClass = isToday ? 'ring-2 ring-teal-500 ring-offset-1 z-10' : '';
 
         let dayColor = 'text-slate-900';
-        if (dayOfWeek === 0) dayColor = 'text-rose-600';
+        if (dayOfWeek === 0 || isNationalHoliday) dayColor = 'text-rose-600';
+        else if (isCutiBersama) dayColor = 'text-teal-700';
         else if (dayOfWeek === 6) dayColor = 'text-amber-600';
 
         daysHtml += `
           <div ${clickHandler}
-            class="${bgStyle} ${opacityClass} ${todayRingClass} rounded-xl border p-1 sm:p-2 min-h-[50px] sm:min-h-[72px] flex flex-col justify-between cursor-pointer transition hover:scale-[1.02] hover:shadow-xs relative">
+            class="${bgStyle} ${opacityClass} ${todayRingClass} rounded-xl border p-1 sm:p-2 min-h-[52px] sm:min-h-[74px] flex flex-col justify-between cursor-pointer transition hover:scale-[1.02] hover:shadow-xs relative">
             <div class="flex items-center justify-between">
               <span class="text-[11px] sm:text-xs font-black ${dayColor}">${dayNum}</span>
               <div class="flex items-center gap-1">
@@ -3660,7 +3833,7 @@
         `;
       });
 
-      // 5. Padding sel kosong di akhir minggu agar baris terakhir tetap rapi 7 kolom
+      // 6. Padding sel kosong di akhir minggu agar baris terakhir tetap rapi 7 kolom
       const totalCells = startDayOfWeek + allCalendarDays.length;
       const remainder = totalCells % 7;
       if (remainder !== 0) {
@@ -3668,6 +3841,45 @@
         for (let t = 0; t < trailingCount; t++) {
           daysHtml += `<div class="min-h-[50px] sm:min-h-[72px] bg-slate-100/35 rounded-xl border border-dashed border-slate-200/50"></div>`;
         }
+      }
+
+      // 7. Banner Ringkasan Libur Nasional & Cuti Bersama Periode Ini
+      let holidayBannerHtml = '';
+      if (periodHolidays.length > 0) {
+        holidayBannerHtml = `
+          <div class="m-2.5 sm:m-3 p-2.5 sm:p-3 rounded-xl bg-gradient-to-r from-rose-50/90 via-amber-50/50 to-teal-50/90 border border-rose-200/80 shadow-2xs space-y-2">
+            <div class="flex items-center justify-between gap-2 flex-wrap">
+              <div class="flex items-center gap-2">
+                <span class="text-base sm:text-lg">🎉</span>
+                <div>
+                  <h4 class="text-xs sm:text-sm font-extrabold text-slate-900 leading-tight">Hari Libur Nasional & Cuti Bersama Periode Ini</h4>
+                  <p class="text-[10px] text-slate-500">Terdapat ${periodHolidays.length} hari libur resmi pemerintah (SKB 3 Menteri)</p>
+                </div>
+              </div>
+              <span class="text-[10px] font-extrabold text-rose-800 bg-white/90 px-2 py-0.5 rounded-md border border-rose-200 shadow-2xs">
+                Resmi Pemerintah
+              </span>
+            </div>
+            <div class="flex items-center gap-1.5 sm:gap-2 flex-wrap pt-1.5 border-t border-rose-100">
+              ${periodHolidays.map(h => `
+                <span class="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[10px] sm:text-[11px] font-bold border ${h.type === 'national' ? 'bg-rose-100/80 text-rose-900 border-rose-300' : 'bg-teal-100/80 text-teal-900 border-teal-300'} shadow-2xs">
+                  <span class="w-2 h-2 rounded-full ${h.type === 'national' ? 'bg-rose-600' : 'bg-teal-600'} shrink-0"></span>
+                  <span><b>${h.dayNum} ${h.monthNameShort}:</b> ${h.name}</span>
+                </span>
+              `).join('')}
+            </div>
+          </div>
+        `;
+      } else {
+        holidayBannerHtml = `
+          <div class="mx-2.5 sm:mx-3 my-2 px-3 py-1.5 rounded-xl bg-slate-50 border border-slate-200/80 text-[11px] text-slate-500 flex items-center justify-between">
+            <div class="flex items-center gap-1.5">
+              <span>ℹ️</span>
+              <span>Tidak ada hari libur nasional atau cuti bersama pada periode aktif ini.</span>
+            </div>
+            <span class="text-[10px] font-semibold text-slate-400">Periode Kerja Normal</span>
+          </div>
+        `;
       }
 
       container.innerHTML = `
@@ -3681,25 +3893,34 @@
                 <p class="text-[9px] sm:text-[10px] text-slate-500">Klik pada salah satu tanggal untuk melihat rincian / edit</p>
               </div>
             </div>
-            <!-- Legend Indicators -->
-            <div class="flex items-center gap-1.5 sm:gap-2 text-[9px] sm:text-[10px] font-semibold flex-wrap">
-              <span class="inline-flex items-center gap-1 text-emerald-700 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
+            <!-- Legend Indicators Lengkap -->
+            <div class="flex items-center gap-1 sm:gap-1.5 text-[9px] sm:text-[10px] font-bold flex-wrap">
+              <span class="inline-flex items-center gap-1 text-emerald-800 bg-emerald-50 px-1.5 py-0.5 rounded border border-emerald-200">
                 <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> Hadir
               </span>
-              <span class="inline-flex items-center gap-1 text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
+              <span class="inline-flex items-center gap-1 text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded border border-amber-200">
                 <span class="w-1.5 h-1.5 rounded-full bg-amber-500"></span> Izin
               </span>
-              <span class="inline-flex items-center gap-1 text-rose-700 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
+              <span class="inline-flex items-center gap-1 text-rose-800 bg-rose-50 px-1.5 py-0.5 rounded border border-rose-200">
                 <span class="w-1.5 h-1.5 rounded-full bg-rose-500"></span> Sakit
               </span>
+              <span class="inline-flex items-center gap-1 text-rose-900 bg-rose-100/90 px-1.5 py-0.5 rounded border border-rose-300">
+                <span class="w-1.5 h-1.5 rounded-full bg-rose-600"></span> Libur Nasional
+              </span>
+              <span class="inline-flex items-center gap-1 text-teal-900 bg-teal-100/90 px-1.5 py-0.5 rounded border border-teal-300">
+                <span class="w-1.5 h-1.5 rounded-full bg-teal-600"></span> Cuti Bersama
+              </span>
               <span class="inline-flex items-center gap-1 text-slate-600 bg-slate-100 px-1.5 py-0.5 rounded border border-slate-200">
-                <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Belum / Libur
+                <span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Libur Akhir Pekan
               </span>
             </div>
           </div>
 
+          <!-- Banner Informasi Libur Nasional & Cuti Bersama -->
+          ${holidayBannerHtml}
+
           <!-- 7-Days Header (Minggu s/d Sabtu) -->
-          <div class="grid grid-cols-7 text-center font-bold text-[10px] sm:text-xs py-1.5 sm:py-2 bg-slate-100/90 border-b border-slate-200 text-slate-700">
+          <div class="grid grid-cols-7 text-center font-bold text-[10px] sm:text-xs py-1.5 sm:py-2 bg-slate-100/90 border-y border-slate-200 text-slate-700">
             <div class="text-rose-600">MIN</div>
             <div>SEN</div>
             <div>SEL</div>
