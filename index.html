@@ -761,7 +761,7 @@
         </div>
       </div>
 
-      <!-- Navigation Section: TAMPILAN UTAMA -->
+      <!-- Navigation Section: TAMPILAN UTAMA (DIBAGI MASING-MASING) -->
       <div class="space-y-1.5">
         <p class="text-[10px] font-bold uppercase tracking-wider text-slate-400 px-1">Tampilan Utama</p>
 
@@ -773,36 +773,51 @@
           </div>
           <div class="text-left flex-1 min-w-0">
             <div class="font-bold">Dashboard Absensi</div>
-            <div class="text-[10px] text-teal-600 font-normal">Ringkasan Gaji & Form Absen</div>
+            <div class="text-[10px] text-teal-600 font-normal">Ringkasan Gaji &amp; Form Absen</div>
           </div>
           <span class="text-xs text-teal-600 font-black">●</span>
         </button>
 
-        <!-- Menu Item 2: Rincian Hari Kerja -->
-        <button id="sidebarNavRincian" onclick="switchView('rincian')"
-          class="w-full flex items-center gap-3 p-3 rounded-2xl text-xs sm:text-sm font-semibold transition text-slate-700 hover:bg-slate-50 border border-slate-200/60 shadow-2xs group">
-          <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-teal-100 group-hover:text-teal-800 flex items-center justify-center text-sm shrink-0 transition">
-            📋
-          </div>
-          <div class="text-left flex-1 min-w-0">
-            <div class="font-bold text-slate-800">Rincian Hari Kerja</div>
-            <div class="text-[10px] text-slate-400 font-normal">Tabel log kehadiran per hari</div>
-          </div>
-        </button>
-
-        <!-- Menu Item 3: Pintas Mode Kalender Visual -->
-        <button onclick="switchView('rincian'); setRincianViewMode('calendar'); closeSidebar();"
+        <!-- Menu Item 2: Kalender Presensi (Dibagi Sendiri) -->
+        <button id="sidebarNavCalendar" onclick="switchView('calendar'); closeSidebar();"
           class="w-full flex items-center gap-3 p-3 rounded-2xl text-xs sm:text-sm font-semibold transition text-slate-700 hover:bg-slate-50 border border-slate-200/60 shadow-2xs group">
           <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-teal-100 group-hover:text-teal-800 flex items-center justify-center text-sm shrink-0 transition">
             🗓️
           </div>
           <div class="text-left flex-1 min-w-0">
-            <div class="font-bold text-slate-800">Kalender Visual</div>
-            <div class="text-[10px] text-slate-400 font-normal">Tampilan kalender & hari libur</div>
+            <div class="font-bold text-slate-800">Kalender Presensi</div>
+            <div class="text-[10px] text-slate-400 font-normal">Kalender bulanan &amp; hari libur</div>
           </div>
         </button>
 
-        <!-- Menu Item 4: Pintas Cetak Slip Gaji -->
+        <!-- Menu Item 3: Tabel Rincian (Dibagi Sendiri) -->
+        <button id="sidebarNavTable" onclick="switchView('table'); closeSidebar();"
+          class="w-full flex items-center gap-3 p-3 rounded-2xl text-xs sm:text-sm font-semibold transition text-slate-700 hover:bg-slate-50 border border-slate-200/60 shadow-2xs group">
+          <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-teal-100 group-hover:text-teal-800 flex items-center justify-center text-sm shrink-0 transition">
+            📊
+          </div>
+          <div class="text-left flex-1 min-w-0">
+            <div class="font-bold text-slate-800">Tabel Rincian</div>
+            <div class="text-[10px] text-slate-400 font-normal">Tabel data grid log kehadiran</div>
+          </div>
+        </button>
+
+        <!-- Menu Item 4: Kartu Kehadiran (Dibagi Sendiri) -->
+        <button id="sidebarNavCard" onclick="switchView('card'); closeSidebar();"
+          class="w-full flex items-center gap-3 p-3 rounded-2xl text-xs sm:text-sm font-semibold transition text-slate-700 hover:bg-slate-50 border border-slate-200/60 shadow-2xs group">
+          <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-teal-100 group-hover:text-teal-800 flex items-center justify-center text-sm shrink-0 transition">
+            🗂️
+          </div>
+          <div class="text-left flex-1 min-w-0">
+            <div class="font-bold text-slate-800">Kartu Kehadiran</div>
+            <div class="text-[10px] text-slate-400 font-normal">Daftar kartu detail harian</div>
+          </div>
+        </button>
+
+        <!-- Hidden backward-compatibility for sidebarNavRincian -->
+        <button id="sidebarNavRincian" onclick="switchView('rincian')" class="hidden"></button>
+
+        <!-- Menu Item 5: Pintas Cetak Slip Gaji -->
         <button onclick="openSlipModal(); closeSidebar();"
           class="w-full flex items-center gap-3 p-3 rounded-2xl text-xs sm:text-sm font-semibold transition text-slate-700 hover:bg-slate-50 border border-slate-200/60 shadow-2xs group">
           <div class="w-8 h-8 rounded-xl bg-slate-100 text-slate-700 group-hover:bg-teal-100 group-hover:text-teal-800 flex items-center justify-center text-sm shrink-0 transition">
@@ -810,7 +825,7 @@
           </div>
           <div class="text-left flex-1 min-w-0">
             <div class="font-bold text-slate-800">Slip Gaji</div>
-            <div class="text-[10px] text-slate-400 font-normal">Pratinjau & cetak slip resmi</div>
+            <div class="text-[10px] text-slate-400 font-normal">Pratinjau &amp; cetak slip resmi</div>
           </div>
         </button>
       </div>
@@ -1375,37 +1390,42 @@
           </div>
         </div>
 
-        <!-- Section Kontainer Utama Rincian -->
-        <div id="wrapperTableSection" class="bg-white rounded-2xl sm:rounded-3xl border border-slate-200/70 shadow-xs overflow-hidden flex flex-col">
-          <!-- Header Bar: Judul, Counter, dan Toggle Mode Kartu vs Tabel -->
-          <div class="p-3 sm:p-4 border-b border-slate-100 flex items-center justify-between gap-2 flex-wrap">
-            <div class="flex items-center gap-2">
-              <h2 class="text-xs sm:text-base font-bold text-slate-900 tracking-tight">Rincian Hari Kerja</h2>
-              <span id="filterResultCount" class="text-[10px] sm:text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200/70">
-                Memuat...
-              </span>
-            </div>
-
-            <!-- iOS Segmented View Switcher (Kartu vs Tabel vs Kalender) -->
-            <div class="bg-slate-100 p-1 rounded-xl border border-slate-200/70 flex items-center gap-0.5">
-              <button type="button" id="btnViewCard" onclick="setRincianViewMode('card')" title="Tampilan Kartu"
-                class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-2xs bg-white text-slate-900 border border-slate-200/60">
-                <span class="text-xs">🗂️</span>
-                <span class="hidden sm:inline">Kartu</span>
-              </button>
-              <button type="button" id="btnViewTable" onclick="setRincianViewMode('table')" title="Tampilan Tabel"
-                class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">
-                <span class="text-xs">📊</span>
-                <span class="hidden sm:inline">Tabel</span>
-              </button>
-              <button type="button" id="btnViewCalendar" onclick="setRincianViewMode('calendar')" title="Tampilan Kalender Visual"
-                class="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">
-                <span class="text-xs">🗓️</span>
-                <span class="hidden sm:inline">Kalender</span>
-              </button>
-            </div>
+        <!-- BILAH PENGALIH TAMPILAN: DIBAGI MASING-MASING (KALENDER, TABEL, KARTU) -->
+        <div class="bg-white p-2.5 sm:p-3 rounded-2xl border border-slate-200/70 shadow-xs flex items-center justify-between gap-2 flex-wrap">
+          <div class="flex items-center gap-2">
+            <h2 id="rincianViewTitle" class="text-xs sm:text-sm font-bold text-slate-900 tracking-tight">🗓️ Kalender Presensi Bulanan</h2>
+            <span id="filterResultCount" class="text-[10px] sm:text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200/70">
+              Memuat...
+            </span>
           </div>
 
+          <!-- iOS Segmented View Switcher (Masing-masing terbagi independen) -->
+          <div class="bg-slate-100 p-1 rounded-xl border border-slate-200/70 flex items-center gap-1">
+            <button type="button" id="btnViewCalendar" onclick="setRincianViewMode('calendar')" title="Tampilan Kalender Visual"
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-2xs bg-white text-slate-900 border border-slate-200/60">
+              <span class="text-xs">🗓️</span>
+              <span>Kalender</span>
+            </button>
+            <button type="button" id="btnViewTable" onclick="setRincianViewMode('table')" title="Tampilan Tabel"
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">
+              <span class="text-xs">📊</span>
+              <span>Tabel</span>
+            </button>
+            <button type="button" id="btnViewCard" onclick="setRincianViewMode('card')" title="Tampilan Kartu"
+              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">
+              <span class="text-xs">🗂️</span>
+              <span>Kartu</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- 1. BAGIAN KALENDER (STANDALONE DEDICATED CALENDAR VIEW) -->
+        <div id="rincianCalendarContainer" class="space-y-3">
+          <!-- Injected via renderCalendarView() -->
+        </div>
+
+        <!-- 2 & 3. BAGIAN TABEL & KARTU (STANDALONE DEDICATED DATA VIEW) -->
+        <div id="wrapperTableSection" class="hidden bg-white rounded-2xl sm:rounded-3xl border border-slate-200/70 shadow-xs overflow-hidden flex flex-col">
           <!-- Filter Status & Search Bar & Sort Dropdown -->
           <div class="p-3 sm:p-4 border-b border-slate-100 bg-slate-50/60 flex flex-col gap-2.5">
             <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap">
@@ -1464,11 +1484,12 @@
             </div>
           </div>
 
+          <!-- TAMPILAN 2: MODE KARTU (Responsive Cards) -->
           <div id="rincianCardsContainer" class="p-3 sm:p-4 bg-slate-50/60 flex-1 space-y-2.5">
             <!-- Dynamic card items injected via JavaScript -->
           </div>
 
-          <!-- TAMPILAN 2: MODE TABEL (Tabel Lengkap dengan Horizontal Scroll & Sticky Header) -->
+          <!-- TAMPILAN 3: MODE TABEL (Tabel Lengkap) -->
           <div id="rincianTableContainer" class="hidden overflow-x-auto flex-1">
             <div class="px-3 py-2 bg-slate-50 text-[11px] text-slate-500 border-b border-slate-200 flex items-center justify-between sm:hidden">
               <span>👉 Geser layar ke samping untuk melihat seluruh kolom</span>
@@ -1477,7 +1498,7 @@
             <table class="w-full text-left text-xs sm:text-sm min-w-[680px]">
               <thead class="sticky top-0 bg-slate-100/95 backdrop-blur z-10 border-b border-slate-200 text-slate-600 uppercase font-semibold text-[10px] sm:text-xs tracking-wider">
                 <tr>
-                  <th class="py-3 px-3.5">Tanggal & Hari</th>
+                  <th class="py-3 px-3.5">Tanggal &amp; Hari</th>
                   <th class="py-3 px-3 text-center">Hari Ke</th>
                   <th class="py-3 px-3 text-center">Status</th>
                   <th class="py-3 px-3.5 text-right font-semibold">Gaji Harian</th>
@@ -1493,15 +1514,10 @@
               </tbody>
             </table>
           </div>
-
-          <!-- TAMPILAN 3: MODE KALENDER (Visual Monthly Attendance Calendar) -->
-          <div id="rincianCalendarContainer" class="hidden p-2.5 sm:p-4 bg-slate-50/60 flex-1 space-y-3">
-            <!-- Dynamic calendar grid injected via JavaScript -->
-          </div>
         </div>
       </div>
 
-    </main>
+      </main>
   </div>
 
   <script>
@@ -1544,48 +1560,59 @@
       }
     }
 
+    function updateNavActiveState(activeKey) {
+      const isDash = (activeKey === 'dashboard');
+      const isCal = (activeKey === 'calendar');
+      const isTab = (activeKey === 'table');
+      const isCrd = (activeKey === 'card');
+
+      // Sidebar buttons
+      const sDash = document.getElementById('sidebarNavDashboard');
+      const sCal = document.getElementById('sidebarNavCalendar');
+      const sTab = document.getElementById('sidebarNavTable');
+      const sCrd = document.getElementById('sidebarNavCard');
+
+      const sActive = "w-full flex items-center gap-3 p-3 rounded-2xl text-xs sm:text-sm font-bold transition bg-emerald-50 text-emerald-800 border border-emerald-200/90 shadow-2xs group";
+      const sInactive = "w-full flex items-center gap-3 p-3 rounded-2xl text-xs sm:text-sm font-semibold transition text-slate-700 hover:bg-slate-50 border border-slate-200/60 shadow-2xs group";
+
+      if (sDash) sDash.className = isDash ? sActive : sInactive;
+      if (sCal) sCal.className = isCal ? sActive : sInactive;
+      if (sTab) sTab.className = isTab ? sActive : sInactive;
+      if (sCrd) sCrd.className = isCrd ? sActive : sInactive;
+
+      // Bottom nav buttons
+      const bDash = document.getElementById('bnavDashboard');
+      const bCal = document.getElementById('bnavCalendar');
+      const bTab = document.getElementById('bnavTable');
+      const bCrd = document.getElementById('bnavCard');
+
+      const bActive = "flex flex-col items-center justify-center flex-1 py-1 text-emerald-700 font-bold transition relative";
+      const bInactive = "flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 font-semibold transition";
+
+      if (bDash) bDash.className = isDash ? bActive : bInactive;
+      if (bCal) bCal.className = isCal ? bActive : bInactive;
+      if (bTab) bTab.className = isTab ? bActive : bInactive;
+      if (bCrd) bCrd.className = isCrd ? bActive : bInactive;
+    }
+
     function switchView(viewName) {
       currentActiveView = viewName;
       const viewDashboard = document.getElementById('viewDashboardSection');
       const viewRincian = document.getElementById('viewRincianSection');
-      const navDashboard = document.getElementById('sidebarNavDashboard');
-      const navRincian = document.getElementById('sidebarNavRincian');
 
       if (viewName === 'dashboard') {
         if (viewDashboard) viewDashboard.classList.remove('hidden');
         if (viewRincian) viewRincian.classList.add('hidden');
-
-        if (navDashboard) {
-          navDashboard.className = "w-full flex items-center gap-3 p-3 rounded-2xl text-xs sm:text-sm font-semibold transition bg-teal-50 text-teal-800 border border-teal-200/90 shadow-2xs group";
-        }
-        if (navRincian) {
-          navRincian.className = "w-full flex items-center gap-3 p-3 rounded-2xl text-xs sm:text-sm font-semibold transition text-slate-700 hover:bg-slate-50 border border-slate-200/60 shadow-2xs group";
-        }
-      } else if (viewName === 'rincian') {
+        updateNavActiveState('dashboard');
+      } else {
         if (viewDashboard) viewDashboard.classList.add('hidden');
         if (viewRincian) viewRincian.classList.remove('hidden');
 
-        if (navRincian) {
-          navRincian.className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition bg-teal-50 text-teal-800 border border-teal-200/80 shadow-xs";
+        let targetMode = currentRincianViewMode || 'calendar';
+        if (viewName === 'calendar' || viewName === 'table' || viewName === 'card') {
+          targetMode = viewName;
         }
-        if (navDashboard) {
-          navDashboard.className = "w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs sm:text-sm font-semibold transition text-slate-700 hover:bg-slate-50 border border-transparent";
-        }
-        setRincianViewMode(currentRincianViewMode);
-        applyTableFilter();
-      }
-
-      // Update mobile bottom nav active state
-      const bnavDash = document.getElementById('bnavDashboard');
-      const bnavRinc = document.getElementById('bnavRincian');
-      if (bnavDash && bnavRinc) {
-        if (viewName === 'dashboard') {
-          bnavDash.className = "flex flex-col items-center justify-center flex-1 py-1 text-emerald-700 font-bold transition";
-          bnavRinc.className = "flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 font-medium transition";
-        } else {
-          bnavRinc.className = "flex flex-col items-center justify-center flex-1 py-1 text-emerald-700 font-bold transition";
-          bnavDash.className = "flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 font-medium transition";
-        }
+        setRincianViewMode(targetMode);
       }
 
       closeSidebar();
@@ -2931,21 +2958,44 @@
       const containerCard = document.getElementById('rincianCardsContainer');
       const containerTable = document.getElementById('rincianTableContainer');
       const containerCalendar = document.getElementById('rincianCalendarContainer');
+      const wrapperTable = document.getElementById('wrapperTableSection');
+      const titleEl = document.getElementById('rincianViewTitle');
+      const btnCsv = document.getElementById('btnExportCsv');
 
-      const activeBtnClass = "flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-bold transition shadow-2xs bg-white text-slate-900 border border-slate-200/60";
-      const inactiveBtnClass = "flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition";
+      const activeBtnClass = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-2xs bg-white text-slate-900 border border-slate-200/80";
+      const inactiveBtnClass = "flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition";
 
       if (btnCard) btnCard.className = (mode === 'card') ? activeBtnClass : inactiveBtnClass;
       if (btnTable) btnTable.className = (mode === 'table') ? activeBtnClass : inactiveBtnClass;
       if (btnCalendar) btnCalendar.className = (mode === 'calendar') ? activeBtnClass : inactiveBtnClass;
 
-      if (containerCard) containerCard.classList.toggle('hidden', mode !== 'card');
-      if (containerTable) containerTable.classList.toggle('hidden', mode !== 'table');
-      if (containerCalendar) containerCalendar.classList.toggle('hidden', mode !== 'calendar');
-
       if (mode === 'calendar') {
+        if (titleEl) titleEl.innerText = "🗓️ Kalender Presensi Bulanan";
+        if (containerCalendar) containerCalendar.classList.remove('hidden');
+        if (wrapperTable) wrapperTable.classList.add('hidden');
+        if (containerTable) containerTable.classList.add('hidden');
+        if (containerCard) containerCard.classList.add('hidden');
+        if (btnCsv) btnCsv.classList.add('hidden');
         renderCalendarView();
+      } else if (mode === 'table') {
+        if (titleEl) titleEl.innerText = "📊 Tabel Rincian Hari Kerja";
+        if (containerCalendar) containerCalendar.classList.add('hidden');
+        if (wrapperTable) wrapperTable.classList.remove('hidden');
+        if (containerTable) containerTable.classList.remove('hidden');
+        if (containerCard) containerCard.classList.add('hidden');
+        applyFeatureSettings(); // Ensure export button visibility rules
+        applyTableFilter();
+      } else if (mode === 'card') {
+        if (titleEl) titleEl.innerText = "🗂️ Kartu Detail Hari Kerja";
+        if (containerCalendar) containerCalendar.classList.add('hidden');
+        if (wrapperTable) wrapperTable.classList.remove('hidden');
+        if (containerCard) containerCard.classList.remove('hidden');
+        if (containerTable) containerTable.classList.add('hidden');
+        applyFeatureSettings();
+        applyTableFilter();
       }
+
+      updateNavActiveState(mode);
     }
 
     function setTableStatusFilter(filter) {
@@ -4315,30 +4365,37 @@
     // Jalankan pengecekan status autentikasi saat web dimuat
     window.onload = checkAuth;
   </script>
-  <!-- ================= MOBILE BOTTOM NAVIGATION BAR (APPLE FROSTED GLASS TAB BAR) ================= -->
-  <nav id="mobileBottomNav" class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/85 backdrop-blur-xl border-t border-slate-200/70 shadow-[0_-4px_20px_rgba(0,0,0,0.04)] px-3 py-1.5 flex items-center justify-around">
+  <!-- ================= MOBILE BOTTOM NAVIGATION BAR (DIBAGI MASING-MASING) ================= -->
+  <nav id="mobileBottomNav" class="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/85 backdrop-blur-xl border-t border-slate-200/70 shadow-[0_-4px_20px_rgba(0,0,0,0.04)] px-1.5 py-1.5 flex items-center justify-around">
     <button type="button" id="bnavDashboard" onclick="switchView('dashboard')"
       class="flex flex-col items-center justify-center flex-1 py-1 text-emerald-700 font-bold transition relative">
       <span class="text-base leading-none relative inline-block">
         🏠
         <span id="dotRemindAbsen" class="hidden absolute -top-1 -right-1.5 w-2 h-2 rounded-full bg-rose-500 ring-2 ring-white animate-pulse"></span>
       </span>
-      <span class="text-[10px] font-bold mt-1">Form Absen</span>
+      <span class="text-[9.5px] font-bold mt-1">Absen</span>
     </button>
-    <button type="button" id="bnavRincian" onclick="switchView('rincian')"
+    <button type="button" id="bnavCalendar" onclick="switchView('calendar')"
       class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 font-semibold transition">
-      <span class="text-base leading-none">📋</span>
-      <span class="text-[10px] font-bold mt-1">Rincian</span>
+      <span class="text-base leading-none">🗓️</span>
+      <span class="text-[9.5px] font-bold mt-1">Kalender</span>
     </button>
-    <button type="button" onclick="openSlipModal()"
+    <button type="button" id="bnavTable" onclick="switchView('table')"
       class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 font-semibold transition">
-      <span class="text-base leading-none">🧾</span>
-      <span class="text-[10px] font-bold mt-1">Slip Gaji</span>
+      <span class="text-base leading-none">📊</span>
+      <span class="text-[9.5px] font-bold mt-1">Tabel</span>
     </button>
+    <button type="button" id="bnavCard" onclick="switchView('card')"
+      class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 font-semibold transition">
+      <span class="text-base leading-none">🗂️</span>
+      <span class="text-[9.5px] font-bold mt-1">Kartu</span>
+    </button>
+    <!-- Hidden backward-compatibility for bnavRincian -->
+    <button type="button" id="bnavRincian" onclick="switchView('rincian')" class="hidden"></button>
     <button type="button" onclick="openSidebar()"
       class="flex flex-col items-center justify-center flex-1 py-1 text-slate-400 hover:text-slate-700 font-semibold transition">
       <span class="text-base leading-none">⚙️</span>
-      <span class="text-[10px] font-bold mt-1">Menu</span>
+      <span class="text-[9.5px] font-bold mt-1">Menu</span>
     </button>
   </nav>
 
