@@ -1390,33 +1390,13 @@
           </div>
         </div>
 
-        <!-- BILAH PENGALIH TAMPILAN: DIBAGI MASING-MASING (KALENDER, TABEL, KARTU) -->
-        <div class="bg-white p-2.5 sm:p-3 rounded-2xl border border-slate-200/70 shadow-xs flex items-center justify-between gap-2 flex-wrap">
-          <div class="flex items-center gap-2">
-            <h2 id="rincianViewTitle" class="text-xs sm:text-sm font-bold text-slate-900 tracking-tight">🗓️ Kalender Presensi Bulanan</h2>
-            <span id="filterResultCount" class="text-[10px] sm:text-xs font-bold text-teal-800 bg-teal-50 px-2.5 py-0.5 rounded-full border border-teal-200/70">
-              Memuat...
-            </span>
-          </div>
-
-          <!-- iOS Segmented View Switcher (Masing-masing terbagi independen) -->
-          <div class="bg-slate-100 p-1 rounded-xl border border-slate-200/70 flex items-center gap-1">
-            <button type="button" id="btnViewCalendar" onclick="setRincianViewMode('calendar')" title="Tampilan Kalender Visual"
-              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition shadow-2xs bg-white text-slate-900 border border-slate-200/60">
-              <span class="text-xs">🗓️</span>
-              <span>Kalender</span>
-            </button>
-            <button type="button" id="btnViewTable" onclick="setRincianViewMode('table')" title="Tampilan Tabel"
-              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">
-              <span class="text-xs">📊</span>
-              <span>Tabel</span>
-            </button>
-            <button type="button" id="btnViewCard" onclick="setRincianViewMode('card')" title="Tampilan Kartu"
-              class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium text-slate-600 hover:text-slate-900 transition">
-              <span class="text-xs">🗂️</span>
-              <span>Kartu</span>
-            </button>
-          </div>
+        <!-- Elemen kompatibilitas tersembunyi (bilah pengalih dihapus sesuai permintaan) -->
+        <div class="hidden" aria-hidden="true">
+          <span id="rincianViewTitle"></span>
+          <span id="filterResultCount"></span>
+          <button type="button" id="btnViewCalendar"></button>
+          <button type="button" id="btnViewTable"></button>
+          <button type="button" id="btnViewCard"></button>
         </div>
 
         <!-- 1. BAGIAN KALENDER (STANDALONE DEDICATED CALENDAR VIEW) -->
